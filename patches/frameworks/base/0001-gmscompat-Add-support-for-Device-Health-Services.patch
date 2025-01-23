@@ -1,4 +1,4 @@
-From 66e5feeb059eac369c377c894950bbdb0741a1a3 Mon Sep 17 00:00:00 2001
+From 688b10f23ef6d762dda35cd3ff60948e6fd0830f Mon Sep 17 00:00:00 2001
 From: Andrew Gunnerson <accounts+github@chiller3.com>
 Date: Wed, 22 Jan 2025 23:41:08 -0500
 Subject: [PATCH] gmscompat: Add support for Device Health Services
@@ -23,15 +23,15 @@ it is using the default MonotonicGaussianOfflineModel ML model instead
 of the TFLiteSplineOfflineModel ML model that seems to be widely used on
 the stock Pixel OS.
 ---
- core/java/android/ext/PackageId.java          |  3 +
- .../sysservice/GmcPackageManager.java         |  6 ++
- .../pm/pkg/component/ParsedActivityUtils.java |  6 ++
- .../pm/pkg/component/ParsedProviderUtils.java |  2 +
- .../pm/pkg/parsing/PackageParsingHooks.java   | 11 +++
- .../pm/ext/DeviceHealthServicesHooks.java     | 96 +++++++++++++++++++
- .../android/server/pm/ext/PackageExtInit.java |  2 +
- .../server/pm/ext/PackageHooksRegistry.java   |  2 +
- 8 files changed, 128 insertions(+)
+ core/java/android/ext/PackageId.java          |   3 +
+ .../sysservice/GmcPackageManager.java         |   6 +
+ .../pm/pkg/component/ParsedActivityUtils.java |   6 +
+ .../pm/pkg/component/ParsedProviderUtils.java |   2 +
+ .../pm/pkg/parsing/PackageParsingHooks.java   |  11 ++
+ .../pm/ext/DeviceHealthServicesHooks.java     | 169 ++++++++++++++++++
+ .../android/server/pm/ext/PackageExtInit.java |   2 +
+ .../server/pm/ext/PackageHooksRegistry.java   |   2 +
+ 8 files changed, 201 insertions(+)
  create mode 100644 services/core/java/com/android/server/pm/ext/DeviceHealthServicesHooks.java
 
 diff --git a/core/java/android/ext/PackageId.java b/core/java/android/ext/PackageId.java
@@ -133,14 +133,16 @@ index 6b53358d1f15..0941cc259b1d 100644
      }
 diff --git a/services/core/java/com/android/server/pm/ext/DeviceHealthServicesHooks.java b/services/core/java/com/android/server/pm/ext/DeviceHealthServicesHooks.java
 new file mode 100644
-index 000000000000..2e15d23b9b6c
+index 000000000000..937bde283547
 --- /dev/null
 +++ b/services/core/java/com/android/server/pm/ext/DeviceHealthServicesHooks.java
-@@ -0,0 +1,96 @@
+@@ -0,0 +1,169 @@
 +package com.android.server.pm.ext;
 +
 +import android.Manifest;
++import android.ext.PackageId;
 +
++import com.android.internal.gmscompat.GmsCompatApp;
 +import com.android.internal.pm.pkg.component.ParsedActivityImpl;
 +import com.android.internal.pm.pkg.component.ParsedProviderImpl;
 +import com.android.internal.pm.pkg.component.ParsedServiceImpl;
@@ -161,7 +163,6 @@ index 000000000000..2e15d23b9b6c
 +                case Manifest.permission.ACCESS_AMBIENT_LIGHT_STATS:
 +                case Manifest.permission.BRIGHTNESS_SLIDER_USAGE:
 +                case Manifest.permission.CONFIGURE_DISPLAY_BRIGHTNESS:
-+                case Manifest.permission.PACKAGE_USAGE_STATS:
 +                case Manifest.permission.RECEIVE_BOOT_COMPLETED:
 +                    return false;
 +                default:
@@ -174,6 +175,7 @@ index 000000000000..2e15d23b9b6c
 +            String name = a.getClassName();
 +
 +            if (!name.equals("com.google.android.apps.turbo.cleardata.ClearDataActivity") &&
++                    !name.equals("com.google.android.gms.common.api.GoogleApiActivity") &&
 +                    !name.startsWith("com.google.android.libraries.smartbattery.brightness.")) {
 +                a.setEnabled(false);
 +            }
@@ -193,6 +195,7 @@ index 000000000000..2e15d23b9b6c
 +            String name = r.getClassName();
 +
 +            if (!name.startsWith("androidx.work.impl.") &&
++                    !name.startsWith("com.google.android.libraries.phenotype.") &&
 +                    !name.startsWith("com.google.android.libraries.smartbattery.common.phenotype.") &&
 +                    !name.startsWith("com.google.android.libraries.smartbattery.brightness.")) {
 +                r.setEnabled(false);
@@ -204,6 +207,7 @@ index 000000000000..2e15d23b9b6c
 +            String name = s.getClassName();
 +
 +            if (!name.startsWith("androidx.work.impl.") &&
++                    !name.startsWith("com.google.android.libraries.phenotype.") &&
 +                    !name.startsWith("com.google.android.libraries.smartbattery.common.phenotype.") &&
 +                    !name.startsWith("com.google.android.libraries.smartbattery.brightness.")) {
 +                s.setEnabled(false);
@@ -219,7 +223,6 @@ index 000000000000..2e15d23b9b6c
 +            case Manifest.permission.BRIGHTNESS_SLIDER_USAGE:
 +            case Manifest.permission.CONFIGURE_DISPLAY_BRIGHTNESS:
 +                return PERMISSION_OVERRIDE_GRANT;
-+            case Manifest.permission.PACKAGE_USAGE_STATS:
 +            case Manifest.permission.RECEIVE_BOOT_COMPLETED:
 +                return NO_PERMISSION_OVERRIDE;
 +            default:
@@ -229,8 +232,78 @@ index 000000000000..2e15d23b9b6c
 +
 +    @Override
 +    public boolean shouldBlockPackageVisibility(int userId, PackageStateInternal otherPkg, boolean isSelfToOther) {
-+        // There's no need to communicate with GMS or any other app for adaptive brightness.
-+        return isSelfToOther;
++        if (!isSelfToOther) {
++            return false;
++        }
++
++        // The actual adaptive brightness implementation is entirely self-contained and does not
++        // depend on GMS. This communication with GMS Core and Play Store is only allowed so that it
++        // can fetch phenotype feature flags, which enables the use of a better (bundled) ML model
++        // than the default. This access unfortunately also allows telemetry.
++        switch (otherPkg.getPackageName()) {
++            /*
++                W Turbo.UpdatePhenotypeFlagsJob: Daily P/H flag update running.
++                W Turbo.PhenotypeManager: Committing phenotype flags.
++                E ActivityThread: Failed to find provider info for app.grapheneos.gmscompat.RpcProvider
++                E GmsCompat/GCA: call to app.grapheneos.gmscompat.RpcProvider failed
++                E GmsCompat/GCA: java.lang.IllegalArgumentException: Unknown authority app.grapheneos.gmscompat.RpcProvider
++                E GmsCompat/GCA:         at android.content.ContentResolver.call(ContentResolver.java:2491)
++                E GmsCompat/GCA:         at com.android.internal.gmscompat.GmsCompatApp.callRpcProvider(GmsCompatApp.java:120)
++                E GmsCompat/GCA:         at com.android.internal.gmscompat.GmsCompatApp.getBinder(GmsCompatApp.java:133)
++                E GmsCompat/GCA:         at com.android.internal.gmscompat.GmsCompatApp.iClientOfGmsCore2Gca(GmsCompatApp.java:102)
++                E GmsCompat/GCA:         at com.android.internal.gmscompat.GmcBinderDefs.maybeGetBinderDef(GmcBinderDefs.java:58)
++                E GmsCompat/GCA:         at com.android.internal.gmscompat.GmcBinderDefs.maybeOverrideBinder(GmcBinderDefs.java:25)
++                E GmsCompat/GCA:         at com.android.internal.gmscompat.GmsHooks.maybeOverrideBinder(GmsHooks.java:734)
++                E GmsCompat/GCA:         at android.os.Parcel.readStrongBinder(Parcel.java:3363)
++                E GmsCompat/GCA:         at blm.y(PG:16)
++                E GmsCompat/GCA:         at anv.onTransact(PG:21)
++                E GmsCompat/GCA:         at android.os.Binder.execTransactInternal(Binder.java:1436)
++                E GmsCompat/GCA:         at android.os.Binder.execTransact(Binder.java:1375)
++                E GmsCompat/GCA:         at android.os.BinderProxy.transactNative(Native Method)
++                E GmsCompat/GCA:         at android.os.BinderProxy.transact(BinderProxy.java:598)
++                E GmsCompat/GCA:         at bku.p(PG:211)
++                E GmsCompat/GCA:         at bfk.run(PG:786)
++                E GmsCompat/GCA:         at android.os.Handler.handleCallback(Handler.java:991)
++                E GmsCompat/GCA:         at android.os.Handler.dispatchMessage(Handler.java:102)
++                E GmsCompat/GCA:         at android.os.Looper.loopOnce(Looper.java:232)
++                E GmsCompat/GCA:         at android.os.Looper.loop(Looper.java:317)
++                E GmsCompat/GCA:         at android.os.HandlerThread.run(HandlerThread.java:85)
++             */
++            case GmsCompatApp.PKG_NAME:
++            case PackageId.GMS_CORE_NAME:
++            /*
++                W Turbo.UpdatePhenotypeFlagsJob: Daily P/H flag update running.
++                W Turbo.PhenotypeManager: Committing phenotype flags.
++                W GooglePlayServicesUtil: com.google.android.apps.turbo requires the Google Play Store, but it is missing.
++                W GoogleApiManager: The service for bpc is not available: bhp{statusCode=SERVICE_INVALID, resolution=null, message=null}
++                W GooglePlayServicesUtil: com.google.android.apps.turbo requires the Google Play Store, but it is missing.
++                W GoogleApiManager: The service for bpc is not available: bhp{statusCode=SERVICE_INVALID, resolution=null, message=null}
++                E PhenotypeFlagCommitter: Retrieving snapshot for com.google.android.apps.internal.zebedee#com.google.android.apps.turbo failed
++                W Turbo.PhenotypeManager: Finished committing phenotype flags.
++                W GooglePlayServicesUtil: com.google.android.apps.turbo requires the Google Play Store, but it is missing.
++                W GoogleApiManager: The service for bpc is not available: bhp{statusCode=SERVICE_INVALID, resolution=null, message=null}
++                W GooglePlayServicesUtil: com.google.android.apps.turbo requires the Google Play Store, but it is missing.
++                W GoogleApiManager: The service for bpc is not available: bhp{statusCode=SERVICE_INVALID, resolution=null, message=null}
++                W MobStoreFlagStore: Unable to update local snapshot for com.google.android.libraries.performance.primes#com.google.android.apps.turbo, may result in stale flags.
++                W MobStoreFlagStore: java.util.concurrent.ExecutionException: coy: 17: 17: API: Phenotype.API is not available on this device. Connection failed with: bhp{statusCode=SERVICE_INVALID, resolution=null, message=null}
++                W MobStoreFlagStore:    at dsz.r(PG:21)
++                W MobStoreFlagStore:    at dsz.get(PG:3)
++                W MobStoreFlagStore:    at a.i(PG:2)
++                W MobStoreFlagStore:    at dol.z(PG:10)
++                W MobStoreFlagStore:    at cpw.c(PG:1)
++                W MobStoreFlagStore:    at cei.run(PG:270)
++                W MobStoreFlagStore:    at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:487)
++                W MobStoreFlagStore:    at java.util.concurrent.FutureTask.run(FutureTask.java:264)
++                W MobStoreFlagStore:    at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:347)
++                W MobStoreFlagStore:    at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
++                W MobStoreFlagStore:    at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
++                W MobStoreFlagStore:    at java.lang.Thread.run(Thread.java:1117)
++             */
++            case PackageId.PLAY_STORE_NAME:
++                return false;
++            default:
++                return true;
++        }
 +    }
 +}
 diff --git a/services/core/java/com/android/server/pm/ext/PackageExtInit.java b/services/core/java/com/android/server/pm/ext/PackageExtInit.java
