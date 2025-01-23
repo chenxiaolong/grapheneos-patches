@@ -1,0 +1,271 @@
+From 66e5feeb059eac369c377c894950bbdb0741a1a3 Mon Sep 17 00:00:00 2001
+From: Andrew Gunnerson <accounts+github@chiller3.com>
+Date: Wed, 22 Jan 2025 23:41:08 -0500
+Subject: [PATCH] gmscompat: Add support for Device Health Services
+
+This adds support for installing com.google.android.apps.turbo as a user
+app. It is given access only to the system permissions necessary for the
+adaptive brightness functionality to work:
+
+* ACCESS_AMBIENT_LIGHT_STATS
+* BRIGHTNESS_SLIDER_USAGE
+* CONFIGURE_DISPLAY_BRIGHTNESS
+
+The remaining permissions, aside from PACKAGE_USAGE_STATS and
+RECEIVE_BOOT_COMPLETED, are removed during package parsing. The app
+happens to be well compartmentalized, so all activities, providers,
+receivers, and services unrelated to the adaptive brightness feature are
+disabled during package parsing.
+
+This initial implementation makes other packages invisible to the app,
+so fetching phenotype flags from GMS is not supported. This means that
+it is using the default MonotonicGaussianOfflineModel ML model instead
+of the TFLiteSplineOfflineModel ML model that seems to be widely used on
+the stock Pixel OS.
+---
+ core/java/android/ext/PackageId.java          |  3 +
+ .../sysservice/GmcPackageManager.java         |  6 ++
+ .../pm/pkg/component/ParsedActivityUtils.java |  6 ++
+ .../pm/pkg/component/ParsedProviderUtils.java |  2 +
+ .../pm/pkg/parsing/PackageParsingHooks.java   | 11 +++
+ .../pm/ext/DeviceHealthServicesHooks.java     | 96 +++++++++++++++++++
+ .../android/server/pm/ext/PackageExtInit.java |  2 +
+ .../server/pm/ext/PackageHooksRegistry.java   |  2 +
+ 8 files changed, 128 insertions(+)
+ create mode 100644 services/core/java/com/android/server/pm/ext/DeviceHealthServicesHooks.java
+
+diff --git a/core/java/android/ext/PackageId.java b/core/java/android/ext/PackageId.java
+index 2db9922539c5..f794ffa53272 100644
+--- a/core/java/android/ext/PackageId.java
++++ b/core/java/android/ext/PackageId.java
+@@ -51,4 +51,7 @@ public interface PackageId {
+ 
+     String PIXEL_HEALTH_NAME = "com.google.android.apps.pixel.health";
+     int PIXEL_HEALTH = 13;
++
++    /** @hide */ String DEVICE_HEALTH_SERVICES_NAME = "com.google.android.apps.turbo";
++    /** @hide */ int DEVICE_HEALTH_SERVICES = 101;
+ }
+diff --git a/core/java/com/android/internal/gmscompat/sysservice/GmcPackageManager.java b/core/java/com/android/internal/gmscompat/sysservice/GmcPackageManager.java
+index cb441bf3a5db..97abbaa35af4 100644
+--- a/core/java/com/android/internal/gmscompat/sysservice/GmcPackageManager.java
++++ b/core/java/com/android/internal/gmscompat/sysservice/GmcPackageManager.java
+@@ -20,6 +20,7 @@ import android.annotation.NonNull;
+ import android.annotation.Nullable;
+ import android.annotation.SuppressLint;
+ import android.app.ActivityThread;
++import android.app.AppGlobals;
+ import android.app.Application;
+ import android.app.ApplicationPackageManager;
+ import android.app.compat.gms.GmsCompat;
+@@ -116,6 +117,11 @@ public class GmcPackageManager extends ApplicationPackageManager {
+             if (GmsCompat.isGmsCore() || GmsCompat.isClientOfGmsCore(ai)) {
+                 ai.flags |= ApplicationInfo.FLAG_SYSTEM | ApplicationInfo.FLAG_UPDATED_SYSTEM_APP;
+             }
++        } else if (PackageId.DEVICE_HEALTH_SERVICES_NAME.equals(packageName) &&
++                AppGlobals.getInitialPackageId() == PackageId.DEVICE_HEALTH_SERVICES) {
++            // Spoof self as system app or else the adaptive brightness logic gets disabled.
++            // Checked by: com.google.android.libraries.smartbattery.common.util.PackageUtil
++            ai.flags |= ApplicationInfo.FLAG_SYSTEM;
+         }
+ 
+         if (!ai.enabled) {
+diff --git a/core/java/com/android/internal/pm/pkg/component/ParsedActivityUtils.java b/core/java/com/android/internal/pm/pkg/component/ParsedActivityUtils.java
+index 55baa532b434..8b4179e15f72 100644
+--- a/core/java/com/android/internal/pm/pkg/component/ParsedActivityUtils.java
++++ b/core/java/com/android/internal/pm/pkg/component/ParsedActivityUtils.java
+@@ -505,6 +505,12 @@ public class ParsedActivityUtils {
+             activity.setExported(hasIntentFilters);
+         }
+ 
++        if (isReceiver) {
++            pkg.getPackageParsingHooks().amendParsedReceiver(activity);
++        } else {
++            pkg.getPackageParsingHooks().amendParsedActivity(activity);
++        }
++
+         return input.success(activity);
+     }
+ 
+diff --git a/core/java/com/android/internal/pm/pkg/component/ParsedProviderUtils.java b/core/java/com/android/internal/pm/pkg/component/ParsedProviderUtils.java
+index 6af2a29822a2..c804e61752b2 100644
+--- a/core/java/com/android/internal/pm/pkg/component/ParsedProviderUtils.java
++++ b/core/java/com/android/internal/pm/pkg/component/ParsedProviderUtils.java
+@@ -158,6 +158,8 @@ public class ParsedProviderUtils {
+         }
+         provider.setAuthority(authority);
+ 
++        pkg.getPackageParsingHooks().amendParsedProvider(provider);
++
+         return parseProviderTags(pkg, tag, res, parser, visibleToEphemeral, provider, input);
+     }
+ 
+diff --git a/core/java/com/android/internal/pm/pkg/parsing/PackageParsingHooks.java b/core/java/com/android/internal/pm/pkg/parsing/PackageParsingHooks.java
+index 6b53358d1f15..0941cc259b1d 100644
+--- a/core/java/com/android/internal/pm/pkg/parsing/PackageParsingHooks.java
++++ b/core/java/com/android/internal/pm/pkg/parsing/PackageParsingHooks.java
+@@ -3,8 +3,10 @@ package com.android.internal.pm.pkg.parsing;
+ import android.annotation.Nullable;
+ import android.content.pm.PackageManager;
+ 
++import com.android.internal.pm.pkg.component.ParsedActivityImpl;
+ import com.android.internal.pm.pkg.component.ParsedPermission;
+ import com.android.internal.pm.pkg.component.ParsedProvider;
++import com.android.internal.pm.pkg.component.ParsedProviderImpl;
+ import com.android.internal.pm.pkg.component.ParsedService;
+ import com.android.internal.pm.pkg.component.ParsedServiceImpl;
+ import com.android.internal.pm.pkg.component.ParsedUsesPermission;
+@@ -42,6 +44,15 @@ public class PackageParsingHooks {
+         return res;
+     }
+ 
++    public void amendParsedActivity(ParsedActivityImpl a) {
++    }
++
++    public void amendParsedProvider(ParsedProviderImpl p) {
++    }
++
++    public void amendParsedReceiver(ParsedActivityImpl r) {
++    }
++
+     public void amendParsedService(ParsedServiceImpl s) {
+ 
+     }
+diff --git a/services/core/java/com/android/server/pm/ext/DeviceHealthServicesHooks.java b/services/core/java/com/android/server/pm/ext/DeviceHealthServicesHooks.java
+new file mode 100644
+index 000000000000..2e15d23b9b6c
+--- /dev/null
++++ b/services/core/java/com/android/server/pm/ext/DeviceHealthServicesHooks.java
+@@ -0,0 +1,96 @@
++package com.android.server.pm.ext;
++
++import android.Manifest;
++
++import com.android.internal.pm.pkg.component.ParsedActivityImpl;
++import com.android.internal.pm.pkg.component.ParsedProviderImpl;
++import com.android.internal.pm.pkg.component.ParsedServiceImpl;
++import com.android.internal.pm.pkg.component.ParsedUsesPermission;
++import com.android.internal.pm.pkg.parsing.PackageParsingHooks;
++import com.android.server.pm.pkg.PackageStateInternal;
++
++import java.util.List;
++
++public class DeviceHealthServicesHooks extends PackageHooks {
++    private static final String TAG = DeviceHealthServicesHooks.class.getSimpleName();
++
++    static class ParsingHooks extends PackageParsingHooks {
++        @Override
++        public boolean shouldSkipUsesPermission(ParsedUsesPermission p) {
++            // Only enable the permissions needed for adaptive brightness to work.
++            switch (p.getName()) {
++                case Manifest.permission.ACCESS_AMBIENT_LIGHT_STATS:
++                case Manifest.permission.BRIGHTNESS_SLIDER_USAGE:
++                case Manifest.permission.CONFIGURE_DISPLAY_BRIGHTNESS:
++                case Manifest.permission.PACKAGE_USAGE_STATS:
++                case Manifest.permission.RECEIVE_BOOT_COMPLETED:
++                    return false;
++                default:
++                    return true;
++            }
++        }
++
++        @Override
++        public void amendParsedActivity(ParsedActivityImpl a) {
++            String name = a.getClassName();
++
++            if (!name.equals("com.google.android.apps.turbo.cleardata.ClearDataActivity") &&
++                    !name.startsWith("com.google.android.libraries.smartbattery.brightness.")) {
++                a.setEnabled(false);
++            }
++        }
++
++        @Override
++        public void amendParsedProvider(ParsedProviderImpl p) {
++            String name = p.getClassName();
++
++            if (!name.equals("androidx.startup.InitializationProvider")) {
++                p.setEnabled(false);
++            }
++        }
++
++        @Override
++        public void amendParsedReceiver(ParsedActivityImpl r) {
++            String name = r.getClassName();
++
++            if (!name.startsWith("androidx.work.impl.") &&
++                    !name.startsWith("com.google.android.libraries.smartbattery.common.phenotype.") &&
++                    !name.startsWith("com.google.android.libraries.smartbattery.brightness.")) {
++                r.setEnabled(false);
++            }
++        }
++
++        @Override
++        public void amendParsedService(ParsedServiceImpl s) {
++            String name = s.getClassName();
++
++            if (!name.startsWith("androidx.work.impl.") &&
++                    !name.startsWith("com.google.android.libraries.smartbattery.common.phenotype.") &&
++                    !name.startsWith("com.google.android.libraries.smartbattery.brightness.")) {
++                s.setEnabled(false);
++            }
++        }
++    }
++
++    @Override
++    public int overridePermissionState(String permission, int userId) {
++        // These system permissions are required for adaptive brightness to work.
++        switch (permission) {
++            case Manifest.permission.ACCESS_AMBIENT_LIGHT_STATS:
++            case Manifest.permission.BRIGHTNESS_SLIDER_USAGE:
++            case Manifest.permission.CONFIGURE_DISPLAY_BRIGHTNESS:
++                return PERMISSION_OVERRIDE_GRANT;
++            case Manifest.permission.PACKAGE_USAGE_STATS:
++            case Manifest.permission.RECEIVE_BOOT_COMPLETED:
++                return NO_PERMISSION_OVERRIDE;
++            default:
++                return PERMISSION_OVERRIDE_REVOKE;
++        }
++    }
++
++    @Override
++    public boolean shouldBlockPackageVisibility(int userId, PackageStateInternal otherPkg, boolean isSelfToOther) {
++        // There's no need to communicate with GMS or any other app for adaptive brightness.
++        return isSelfToOther;
++    }
++}
+diff --git a/services/core/java/com/android/server/pm/ext/PackageExtInit.java b/services/core/java/com/android/server/pm/ext/PackageExtInit.java
+index 0043aa576a6e..3cf678c5925b 100644
+--- a/services/core/java/com/android/server/pm/ext/PackageExtInit.java
++++ b/services/core/java/com/android/server/pm/ext/PackageExtInit.java
+@@ -87,6 +87,8 @@ public class PackageExtInit implements ParsingPackageUtils.PackageExtInitIface {
+                     "7ce83c1b71f3d572fed04c8d40c5cb10ff75e6d87d9df6fbd53f0468c2905053");
+             case PIXEL_HEALTH_NAME -> validate(PIXEL_HEALTH, 2224L,
+                     "295499d8d0e93b7ed64f90e8cddffc12e3be23d8806f54e05d1abf415c37f5ba");
++            case DEVICE_HEALTH_SERVICES_NAME -> validate(DEVICE_HEALTH_SERVICES, 10270607L,
++                    "c91e8c545ff5f8ba6371bd88ba19fc26841d9ba5f4aea47b8f381df2b4d1ea41");
+ 
+             default -> PackageId.UNKNOWN;
+         };
+diff --git a/services/core/java/com/android/server/pm/ext/PackageHooksRegistry.java b/services/core/java/com/android/server/pm/ext/PackageHooksRegistry.java
+index 968d59e41643..c6c870f6e477 100644
+--- a/services/core/java/com/android/server/pm/ext/PackageHooksRegistry.java
++++ b/services/core/java/com/android/server/pm/ext/PackageHooksRegistry.java
+@@ -18,6 +18,7 @@ public class PackageHooksRegistry {
+             case PackageId.G_EUICC_LPA_NAME -> new EuiccGoogleHooks.ParsingHooks();
+             case PackageId.PIXEL_CAMERA_SERVICES_NAME -> new PixelCameraServicesHooks.ParsingHooks();
+             case PackageId.PIXEL_HEALTH_NAME -> new PixelHealthHooks.ParsingHooks();
++            case PackageId.DEVICE_HEALTH_SERVICES_NAME -> new DeviceHealthServicesHooks.ParsingHooks();
+             default -> PackageParsingHooks.DEFAULT;
+         };
+     }
+@@ -30,6 +31,7 @@ public class PackageHooksRegistry {
+             case PackageId.ANDROID_AUTO -> new AndroidAutoHooks();
+             case PackageId.PIXEL_CAMERA_SERVICES -> new PixelCameraServicesHooks();
+             case PackageId.PIXEL_HEALTH -> new PixelHealthHooks();
++            case PackageId.DEVICE_HEALTH_SERVICES -> new DeviceHealthServicesHooks();
+             default -> PackageHooks.DEFAULT;
+         };
+     }
+-- 
+2.48.1
+
