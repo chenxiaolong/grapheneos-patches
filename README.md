@@ -72,6 +72,8 @@ Allows access to query and modify the device's auto-brightness configuration, wh
 * parameters for AOSP's auto-brightness implementation's short term model
 * whether color samples of the screen should be collected when tracking brightness slider events
 
+Android persists this configuration in `/data/system/display-manager-state.xml`. It remains even if Device Health Services is disabled or uninstalled.
+
 ### Usage
 
  To use Device Health Services, first install the app. The APK will likely need to be extracted from the stock Pixel OS at `/product/priv-app/TurboPrebuilt/TurboPrebuilt.apk`. Even though the app is hosted in Google Play, it claims the app is incompatible unless the device is running the stock Pixel OS.
