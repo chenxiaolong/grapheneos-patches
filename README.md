@@ -78,7 +78,7 @@ Android persists this configuration in `/data/system/display-manager-state.xml`.
 
  To use Device Health Services, first install the app. The APK will likely need to be extracted from the stock Pixel OS at `/product/priv-app/TurboPrebuilt/TurboPrebuilt.apk`. Even though the app is hosted in Google Play, it claims the app is incompatible unless the device is running the stock Pixel OS.
 
-After it is installed, launch it once by going to Android's Settings -> Apps -> Device Health Services -> Storage & cache -> Manage storage. This is necessary because newly installed user apps (and force stopped apps) are not allowed automatically run until the user manually opens it once, and there's no other easily accessible UI for Device Health Services.
+After it is installed, launch it once by going to Android's Settings -> Apps -> Device Health Services -> Storage & cache -> Manage storage. This is necessary because newly installed user apps (and force stopped apps) are not to allowed automatically run until the user manually opens it once, and there's no other easily accessible UI for Device Health Services.
 
 Finally, reboot the device. Device Health Services will schedule the periodic ML model training job on boot.
 
