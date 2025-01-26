@@ -1,4 +1,4 @@
-From 688b10f23ef6d762dda35cd3ff60948e6fd0830f Mon Sep 17 00:00:00 2001
+From d0ed256ed4765bf9819eeb2e942ae6004f1a8da7 Mon Sep 17 00:00:00 2001
 From: Andrew Gunnerson <accounts+github@chiller3.com>
 Date: Wed, 22 Jan 2025 23:41:08 -0500
 Subject: [PATCH] gmscompat: Add support for Device Health Services
@@ -28,10 +28,10 @@ the stock Pixel OS.
  .../pm/pkg/component/ParsedActivityUtils.java |   6 +
  .../pm/pkg/component/ParsedProviderUtils.java |   2 +
  .../pm/pkg/parsing/PackageParsingHooks.java   |  11 ++
- .../pm/ext/DeviceHealthServicesHooks.java     | 169 ++++++++++++++++++
+ .../pm/ext/DeviceHealthServicesHooks.java     | 170 ++++++++++++++++++
  .../android/server/pm/ext/PackageExtInit.java |   2 +
  .../server/pm/ext/PackageHooksRegistry.java   |   2 +
- 8 files changed, 201 insertions(+)
+ 8 files changed, 202 insertions(+)
  create mode 100644 services/core/java/com/android/server/pm/ext/DeviceHealthServicesHooks.java
 
 diff --git a/core/java/android/ext/PackageId.java b/core/java/android/ext/PackageId.java
@@ -133,10 +133,10 @@ index 6b53358d1f15..0941cc259b1d 100644
      }
 diff --git a/services/core/java/com/android/server/pm/ext/DeviceHealthServicesHooks.java b/services/core/java/com/android/server/pm/ext/DeviceHealthServicesHooks.java
 new file mode 100644
-index 000000000000..937bde283547
+index 000000000000..8264b976c808
 --- /dev/null
 +++ b/services/core/java/com/android/server/pm/ext/DeviceHealthServicesHooks.java
-@@ -0,0 +1,169 @@
+@@ -0,0 +1,170 @@
 +package com.android.server.pm.ext;
 +
 +import android.Manifest;
@@ -270,6 +270,7 @@ index 000000000000..937bde283547
 +                E GmsCompat/GCA:         at android.os.HandlerThread.run(HandlerThread.java:85)
 +             */
 +            case GmsCompatApp.PKG_NAME:
++            case GmsCompatApp.PKG_NAME + ".lib":
 +            case PackageId.GMS_CORE_NAME:
 +            /*
 +                W Turbo.UpdatePhenotypeFlagsJob: Daily P/H flag update running.
