@@ -1,4 +1,4 @@
-From d0ed256ed4765bf9819eeb2e942ae6004f1a8da7 Mon Sep 17 00:00:00 2001
+From e1af92578c72f923d6edfa230b635e7711a4b908 Mon Sep 17 00:00:00 2001
 From: Andrew Gunnerson <accounts+github@chiller3.com>
 Date: Wed, 22 Jan 2025 23:41:08 -0500
 Subject: [PATCH] gmscompat: Add support for Device Health Services
@@ -47,7 +47,7 @@ index 2db9922539c5..f794ffa53272 100644
 +    /** @hide */ int DEVICE_HEALTH_SERVICES = 101;
  }
 diff --git a/core/java/com/android/internal/gmscompat/sysservice/GmcPackageManager.java b/core/java/com/android/internal/gmscompat/sysservice/GmcPackageManager.java
-index cb441bf3a5db..97abbaa35af4 100644
+index d9b52ac0d178..d185d34098d8 100644
 --- a/core/java/com/android/internal/gmscompat/sysservice/GmcPackageManager.java
 +++ b/core/java/com/android/internal/gmscompat/sysservice/GmcPackageManager.java
 @@ -20,6 +20,7 @@ import android.annotation.NonNull;
@@ -71,10 +71,10 @@ index cb441bf3a5db..97abbaa35af4 100644
  
          if (!ai.enabled) {
 diff --git a/core/java/com/android/internal/pm/pkg/component/ParsedActivityUtils.java b/core/java/com/android/internal/pm/pkg/component/ParsedActivityUtils.java
-index 55baa532b434..8b4179e15f72 100644
+index 219e885331ee..662287412aa5 100644
 --- a/core/java/com/android/internal/pm/pkg/component/ParsedActivityUtils.java
 +++ b/core/java/com/android/internal/pm/pkg/component/ParsedActivityUtils.java
-@@ -505,6 +505,12 @@ public class ParsedActivityUtils {
+@@ -507,6 +507,12 @@ public class ParsedActivityUtils {
              activity.setExported(hasIntentFilters);
          }
  
@@ -88,10 +88,10 @@ index 55baa532b434..8b4179e15f72 100644
      }
  
 diff --git a/core/java/com/android/internal/pm/pkg/component/ParsedProviderUtils.java b/core/java/com/android/internal/pm/pkg/component/ParsedProviderUtils.java
-index 6af2a29822a2..c804e61752b2 100644
+index 5c39827a7ec7..1ba05c4f79e4 100644
 --- a/core/java/com/android/internal/pm/pkg/component/ParsedProviderUtils.java
 +++ b/core/java/com/android/internal/pm/pkg/component/ParsedProviderUtils.java
-@@ -158,6 +158,8 @@ public class ParsedProviderUtils {
+@@ -159,6 +159,8 @@ public class ParsedProviderUtils {
          }
          provider.setAuthority(authority);
  

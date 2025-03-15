@@ -33,15 +33,15 @@ All other permissions are entirely removed.
 * This is not a perfect implementation because the system permissions are immediately granted when Device Health Services is installed. A proper implementation would ask for user consent like how GrapheneOS' Android Auto permission toggles work.
 * Although the actual adaptive brightness functionality is entirely self-contained and does not depend on Google Play Services, the patches permit access to GMS Core and the Play Store. This is necessary to allow it to query feature flags that enable the use of the better `TFLiteSplineOfflineModel` (ML model ID 12) instead of the default `MonotonicGaussianOfflineModel` (ML model ID 6).
 
-As of Android 15 QPR1, this is what the systems permissions grant access to:
+As of Android 15 QPR2, this is what the systems permissions grant access to:
 
 #### `ACCESS_AMBIENT_LIGHT_STATS`
 
-Allows access to ambient light sensor statistics collected for a week, split into one day intervals. The statistics for each day include the amount of time spent in an environments where the light level falls into a [set of predefined buckets](https://android.googlesource.com/platform/frameworks/base/+/refs/tags/android-15.0.0_r13/services/core/java/com/android/server/display/AmbientBrightnessStatsTracker.java#60). Android records this data in `/data/system/ambient_brightness_stats.xml`.
+Allows access to ambient light sensor statistics collected for a week, split into one day intervals. The statistics for each day include the amount of time spent in an environments where the light level falls into a [set of predefined buckets](https://android.googlesource.com/platform/frameworks/base/+/refs/tags/android-15.0.0_r23/services/core/java/com/android/server/display/AmbientBrightnessStatsTracker.java#60). Android records this data in `/data/system/ambient_brightness_stats.xml`.
 
 #### `BRIGHTNESS_SLIDER_USAGE`
 
-Allows access to [the last 100](https://android.googlesource.com/platform/frameworks/base/+/refs/tags/android-15.0.0_r13/services/core/java/com/android/server/display/BrightnessTracker.java#101) brightness slider change events. Each event includes the following information from when the brightness slider was changed. ~~Struck-through~~ fields are available to, but ignored by Device Health Services.
+Allows access to [the last 100](https://android.googlesource.com/platform/frameworks/base/+/refs/tags/android-15.0.0_r23/services/core/java/com/android/server/display/BrightnessTracker.java#101) brightness slider change events. Each event includes the following information from when the brightness slider was changed. ~~Struck-through~~ fields are available to, but ignored by Device Health Services.
 
 * the selected brightness
 * the timestamp
