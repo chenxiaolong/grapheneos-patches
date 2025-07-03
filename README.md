@@ -82,6 +82,14 @@ After it is installed, launch it once by going to Android's Settings -> Apps -> 
 
 Finally, reboot the device. Device Health Services will schedule the periodic ML model training job on boot.
 
+## USB port security for userdebug builds
+
+Patches:
+* [`0002-Revert-don-t-enable-port-security-restrictions-by-de.patch`](./patches/frameworks/base/0002-Revert-don-t-enable-port-security-restrictions-by-de.patch)
+* [`0001-Keep-external-ports-disabled-at-boot-on-userdebug-bu.patch`](./patches/system/core/0001-Keep-external-ports-disabled-at-boot-on-userdebug-bu.patch)
+
+These revert userdebug-specific changes to enable USB ports during early boot and for setting the initial value of the USB port security setting to "On".
+
 ## License
 
 All patches are licensed under Apache 2.0, the same as the original code being patched. Please see [`LICENSE`](./LICENSE) for the full license text.

@@ -1,0 +1,35 @@
+From 81fc176e179c898b6ea309316c951f368d78afea Mon Sep 17 00:00:00 2001
+From: Andrew Gunnerson <accounts+github@chiller3.com>
+Date: Thu, 3 Jul 2025 15:18:20 -0400
+Subject: [PATCH 2/2] Revert "don't enable port security restrictions by
+ default on debug builds"
+
+This reverts commit 02e2ada43ab991720b6cbb2119ea0a3548dbc216.
+---
+ core/java/android/ext/settings/UsbPortSecurity.java | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
+
+diff --git a/core/java/android/ext/settings/UsbPortSecurity.java b/core/java/android/ext/settings/UsbPortSecurity.java
+index f58771714ac8..bdfa1c1347d8 100644
+--- a/core/java/android/ext/settings/UsbPortSecurity.java
++++ b/core/java/android/ext/settings/UsbPortSecurity.java
+@@ -1,7 +1,5 @@
+ package android.ext.settings;
+ 
+-import android.os.Build;
+-
+ /** @hide */
+ public class UsbPortSecurity {
+     public static final int MODE_DISABLED = 0;
+@@ -14,7 +12,5 @@ public class UsbPortSecurity {
+ 
+     // keep in sync with USB HAL implementations that check this sysprop during init
+     public static final IntSysProperty MODE_SETTING = new IntSysProperty(
+-            "persist.security.usb_mode",
+-            // USB adb access is needed for debugging early boot failures
+-            Build.IS_DEBUGGABLE ? MODE_ENABLED : MODE_CHARGING_ONLY_WHEN_LOCKED);
++            "persist.security.usb_mode", MODE_CHARGING_ONLY_WHEN_LOCKED);
+ }
+-- 
+2.50.0
+
