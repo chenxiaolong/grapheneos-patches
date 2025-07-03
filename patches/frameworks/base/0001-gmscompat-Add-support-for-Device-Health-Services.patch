@@ -1,7 +1,7 @@
-From e1af92578c72f923d6edfa230b635e7711a4b908 Mon Sep 17 00:00:00 2001
+From 7c4274051e459c8c47b71bd1e7db45f8e62b56c2 Mon Sep 17 00:00:00 2001
 From: Andrew Gunnerson <accounts+github@chiller3.com>
 Date: Wed, 22 Jan 2025 23:41:08 -0500
-Subject: [PATCH] gmscompat: Add support for Device Health Services
+Subject: [PATCH 1/2] gmscompat: Add support for Device Health Services
 
 This adds support for installing com.google.android.apps.turbo as a user
 app. It is given access only to the system permissions necessary for the
@@ -308,10 +308,10 @@ index 000000000000..8264b976c808
 +    }
 +}
 diff --git a/services/core/java/com/android/server/pm/ext/PackageExtInit.java b/services/core/java/com/android/server/pm/ext/PackageExtInit.java
-index 0043aa576a6e..3cf678c5925b 100644
+index 81febace2e9d..c3d40c3327f3 100644
 --- a/services/core/java/com/android/server/pm/ext/PackageExtInit.java
 +++ b/services/core/java/com/android/server/pm/ext/PackageExtInit.java
-@@ -87,6 +87,8 @@ public class PackageExtInit implements ParsingPackageUtils.PackageExtInitIface {
+@@ -100,6 +100,8 @@ public class PackageExtInit implements ParsingPackageUtils.PackageExtInitIface {
                      "7ce83c1b71f3d572fed04c8d40c5cb10ff75e6d87d9df6fbd53f0468c2905053");
              case PIXEL_HEALTH_NAME -> validate(PIXEL_HEALTH, 2224L,
                      "295499d8d0e93b7ed64f90e8cddffc12e3be23d8806f54e05d1abf415c37f5ba");
@@ -341,5 +341,5 @@ index 968d59e41643..c6c870f6e477 100644
          };
      }
 -- 
-2.48.1
+2.50.0
 

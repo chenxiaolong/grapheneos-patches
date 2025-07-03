@@ -1,4 +1,4 @@
-From 4044ec1d83317c295f9a9a1a3ea8c36f5e25b019 Mon Sep 17 00:00:00 2001
+From d63340d58c290027b07a6b37e0cce6387a14e39a Mon Sep 17 00:00:00 2001
 From: Andrew Gunnerson <accounts+github@chiller3.com>
 Date: Wed, 22 Jan 2025 23:39:22 -0500
 Subject: [PATCH] Unconditionally enable ro.adb.secure=1
@@ -8,10 +8,10 @@ Subject: [PATCH] Unconditionally enable ro.adb.secure=1
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/scripts/gen_build_prop.py b/scripts/gen_build_prop.py
-index 1c7a11ed7..d6e286c3b 100644
+index fee57ac7a..4a2c94059 100644
 --- a/scripts/gen_build_prop.py
 +++ b/scripts/gen_build_prop.py
-@@ -313,9 +313,9 @@ def append_additional_system_props(args):
+@@ -327,9 +327,9 @@ def append_additional_system_props(args):
      props.append("ro.secure=1")
      props.append("security.perf_harden=1")
  
@@ -23,5 +23,5 @@ index 1c7a11ed7..d6e286c3b 100644
        enable_dalvik_lock_contention_logging = False
      else:
 -- 
-2.48.1
+2.50.0
 
