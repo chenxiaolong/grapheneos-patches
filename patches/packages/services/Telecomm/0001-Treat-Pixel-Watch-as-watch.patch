@@ -1,0 +1,38 @@
+From 344195e1d0aa8e30dda3a4ea4a91966ef1520de7 Mon Sep 17 00:00:00 2001
+From: Andrew Gunnerson <accounts+github@chiller3.com>
+Date: Sun, 20 Jul 2025 00:29:56 -0400
+Subject: [PATCH] Treat "Pixel Watch*" as watch
+
+There is currently a bug on some devices where they are not able to see
+the Pixel Watch's bluetooth device class for some reason. It should be
+the wearable watch device class (0x2a4704), but the phone thinks it's
+unclassified (0x001f00). When this happens, the HCI connect request
+event (0x4) does not show up in the bluetooth snoop log. There is no
+other packet that mentions the watch's device class.
+
+This commit works around the problem for the Pixel Watch specifically,
+by just pattern matching the bluetooth device name.
+---
+ .../server/telecom/bluetooth/BluetoothRouteManager.java     | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/src/com/android/server/telecom/bluetooth/BluetoothRouteManager.java b/src/com/android/server/telecom/bluetooth/BluetoothRouteManager.java
+index 93dbed6b9..d081f4255 100644
+--- a/src/com/android/server/telecom/bluetooth/BluetoothRouteManager.java
++++ b/src/com/android/server/telecom/bluetooth/BluetoothRouteManager.java
+@@ -823,6 +823,12 @@ public class BluetoothRouteManager extends StateMachine {
+             return false;
+         }
+ 
++        String name = device.getName();
++        if (name != null && name.startsWith("Pixel Watch")) {
++            Log.i(this, "isWatch: Treating %s as watch", name);
++            return true;
++        }
++
+         BluetoothClass deviceClass = device.getBluetoothClass();
+         if (deviceClass != null && deviceClass.getDeviceClass()
+                 == BluetoothClass.Device.WEARABLE_WRIST_WATCH) {
+-- 
+2.50.1
+
