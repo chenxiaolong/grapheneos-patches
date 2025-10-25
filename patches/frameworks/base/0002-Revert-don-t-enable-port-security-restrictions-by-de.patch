@@ -1,4 +1,4 @@
-From 81fc176e179c898b6ea309316c951f368d78afea Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Andrew Gunnerson <accounts+github@chiller3.com>
 Date: Thu, 3 Jul 2025 15:18:20 -0400
 Subject: [PATCH 2/2] Revert "don't enable port security restrictions by
@@ -31,5 +31,5 @@ index f58771714ac8..bdfa1c1347d8 100644
 +            "persist.security.usb_mode", MODE_CHARGING_ONLY_WHEN_LOCKED);
  }
 -- 
-2.50.0
+2.51.1
 

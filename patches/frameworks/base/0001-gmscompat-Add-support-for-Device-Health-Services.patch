@@ -1,4 +1,4 @@
-From 7c4274051e459c8c47b71bd1e7db45f8e62b56c2 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Andrew Gunnerson <accounts+github@chiller3.com>
 Date: Wed, 22 Jan 2025 23:41:08 -0500
 Subject: [PATCH 1/2] gmscompat: Add support for Device Health Services
@@ -35,19 +35,19 @@ the stock Pixel OS.
  create mode 100644 services/core/java/com/android/server/pm/ext/DeviceHealthServicesHooks.java
 
 diff --git a/core/java/android/ext/PackageId.java b/core/java/android/ext/PackageId.java
-index 2db9922539c5..f794ffa53272 100644
+index 7bd6c61f3df6..f27e7315fe15 100644
 --- a/core/java/android/ext/PackageId.java
 +++ b/core/java/android/ext/PackageId.java
-@@ -51,4 +51,7 @@ public interface PackageId {
+@@ -54,4 +54,7 @@ public interface PackageId {
  
-     String PIXEL_HEALTH_NAME = "com.google.android.apps.pixel.health";
-     int PIXEL_HEALTH = 13;
+     /** @hide */ String BUGLE_NAME = "com.google.android.apps.messaging";
+     /** @hide */ int BUGLE = 14;
 +
 +    /** @hide */ String DEVICE_HEALTH_SERVICES_NAME = "com.google.android.apps.turbo";
 +    /** @hide */ int DEVICE_HEALTH_SERVICES = 101;
  }
 diff --git a/core/java/com/android/internal/gmscompat/sysservice/GmcPackageManager.java b/core/java/com/android/internal/gmscompat/sysservice/GmcPackageManager.java
-index d9b52ac0d178..d185d34098d8 100644
+index 39be2e3df379..dabc03d6d540 100644
 --- a/core/java/com/android/internal/gmscompat/sysservice/GmcPackageManager.java
 +++ b/core/java/com/android/internal/gmscompat/sysservice/GmcPackageManager.java
 @@ -20,6 +20,7 @@ import android.annotation.NonNull;
@@ -58,7 +58,7 @@ index d9b52ac0d178..d185d34098d8 100644
  import android.app.Application;
  import android.app.ApplicationPackageManager;
  import android.app.compat.gms.GmsCompat;
-@@ -116,6 +117,11 @@ public class GmcPackageManager extends ApplicationPackageManager {
+@@ -118,6 +119,11 @@ public class GmcPackageManager extends ApplicationPackageManager {
              if (GmsCompat.isGmsCore() || GmsCompat.isClientOfGmsCore(ai)) {
                  ai.flags |= ApplicationInfo.FLAG_SYSTEM | ApplicationInfo.FLAG_UPDATED_SYSTEM_APP;
              }
@@ -308,20 +308,20 @@ index 000000000000..8264b976c808
 +    }
 +}
 diff --git a/services/core/java/com/android/server/pm/ext/PackageExtInit.java b/services/core/java/com/android/server/pm/ext/PackageExtInit.java
-index 81febace2e9d..c3d40c3327f3 100644
+index 256c3c815101..d42cdeae7fc9 100644
 --- a/services/core/java/com/android/server/pm/ext/PackageExtInit.java
 +++ b/services/core/java/com/android/server/pm/ext/PackageExtInit.java
-@@ -100,6 +100,8 @@ public class PackageExtInit implements ParsingPackageUtils.PackageExtInitIface {
-                     "7ce83c1b71f3d572fed04c8d40c5cb10ff75e6d87d9df6fbd53f0468c2905053");
-             case PIXEL_HEALTH_NAME -> validate(PIXEL_HEALTH, 2224L,
+@@ -102,6 +102,8 @@ public class PackageExtInit implements ParsingPackageUtils.PackageExtInitIface {
                      "295499d8d0e93b7ed64f90e8cddffc12e3be23d8806f54e05d1abf415c37f5ba");
+             case BUGLE_NAME -> validate(BUGLE, 273168063L,
+                     "f7e73d4edc2b7f55eecd3f898d3cca7da9cbbf51694eba14f816e2eccf015035");
 +            case DEVICE_HEALTH_SERVICES_NAME -> validate(DEVICE_HEALTH_SERVICES, 10270607L,
 +                    "c91e8c545ff5f8ba6371bd88ba19fc26841d9ba5f4aea47b8f381df2b4d1ea41");
  
              default -> PackageId.UNKNOWN;
          };
 diff --git a/services/core/java/com/android/server/pm/ext/PackageHooksRegistry.java b/services/core/java/com/android/server/pm/ext/PackageHooksRegistry.java
-index 968d59e41643..c6c870f6e477 100644
+index 2f37f0757654..6f8a61369be8 100644
 --- a/services/core/java/com/android/server/pm/ext/PackageHooksRegistry.java
 +++ b/services/core/java/com/android/server/pm/ext/PackageHooksRegistry.java
 @@ -18,6 +18,7 @@ public class PackageHooksRegistry {
@@ -332,14 +332,14 @@ index 968d59e41643..c6c870f6e477 100644
              default -> PackageParsingHooks.DEFAULT;
          };
      }
-@@ -30,6 +31,7 @@ public class PackageHooksRegistry {
-             case PackageId.ANDROID_AUTO -> new AndroidAutoHooks();
+@@ -31,6 +32,7 @@ public class PackageHooksRegistry {
              case PackageId.PIXEL_CAMERA_SERVICES -> new PixelCameraServicesHooks();
              case PackageId.PIXEL_HEALTH -> new PixelHealthHooks();
+             case PackageId.GMS_CORE -> new GmsCoreHooks();
 +            case PackageId.DEVICE_HEALTH_SERVICES -> new DeviceHealthServicesHooks();
              default -> PackageHooks.DEFAULT;
          };
      }
 -- 
-2.50.0
+2.51.1
 
