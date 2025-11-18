@@ -1,0 +1,25 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Andrew Gunnerson <accounts+github@chiller3.com>
+Date: Mon, 7 Jul 2025 13:41:05 -0400
+Subject: [PATCH] Use Pixel default boot animation
+
+---
+ config/device/common/file-exclusion.yml | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/config/device/common/file-exclusion.yml b/config/device/common/file-exclusion.yml
+index 4cf1e151..7d2ddc52 100644
+--- a/config/device/common/file-exclusion.yml
++++ b/config/device/common/file-exclusion.yml
+@@ -67,8 +67,6 @@ filters:
+       - product/fonts/ZillaSlab-SemiBoldItalic.ttf
+       - product/framework/com.google.android.dialer.support.jar
+       - product/framework/libhwinfo.jar
+-      - product/media/bootanimation-dark.zip
+-      - product/media/bootanimation.zip
+       - product/priv-app/DMService/lib/arm/libdmengine.so
+       - product/priv-app/DMService/lib/arm/libdmjavaplugin.so
+       - product/priv-app/DMService/lib/arm64/libdmengine.so
+-- 
+2.51.1
+

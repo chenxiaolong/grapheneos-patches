@@ -90,6 +90,13 @@ Patches:
 
 These revert userdebug-specific changes to enable USB ports during early boot and for setting the initial value of the USB port security setting to "On".
 
+## Stock boot animation
+
+Patches:
+* [`0001-Use-Pixel-default-boot-animation.patch`](./patches/vendor/adevtool/0001-Use-Pixel-default-boot-animation.patch)
+
+Personal preference. I like that the screen resolution doesn't change during boot.
+
 ## License
 
 All patches are licensed under Apache 2.0, the same as the original code being patched. Please see [`LICENSE`](./LICENSE) for the full license text.
