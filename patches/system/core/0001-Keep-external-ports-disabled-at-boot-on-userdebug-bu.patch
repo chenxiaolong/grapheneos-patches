@@ -1,4 +1,4 @@
-From 8e7a219f0ce7e6e0e8383ee83c4694538dc21067 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Andrew Gunnerson <accounts+github@chiller3.com>
 Date: Thu, 3 Jul 2025 15:16:27 -0400
 Subject: [PATCH] Keep external ports disabled at boot on userdebug builds
@@ -8,10 +8,10 @@ Subject: [PATCH] Keep external ports disabled at boot on userdebug builds
  1 file changed, 7 deletions(-)
 
 diff --git a/init/Android.bp b/init/Android.bp
-index bbc7f4e60..588fc2545 100644
+index 7f98f5afb..fcbb38020 100644
 --- a/init/Android.bp
 +++ b/init/Android.bp
-@@ -126,9 +126,6 @@ libinit_cc_defaults {
+@@ -127,9 +127,6 @@ libinit_cc_defaults {
      product_variables: {
          debuggable: {
              cppflags: [
@@ -21,7 +21,7 @@ index bbc7f4e60..588fc2545 100644
                  "-UALLOW_FIRST_STAGE_CONSOLE",
                  "-DALLOW_FIRST_STAGE_CONSOLE=1",
                  "-UALLOW_LOCAL_PROP_OVERRIDE",
-@@ -425,10 +422,6 @@ init_first_stage_cc_defaults {
+@@ -428,10 +425,6 @@ init_first_stage_cc_defaults {
      product_variables: {
          debuggable: {
              cflags: [
@@ -33,5 +33,5 @@ index bbc7f4e60..588fc2545 100644
                  "-DALLOW_FIRST_STAGE_CONSOLE=1",
  
 -- 
-2.50.0
+2.51.1
 

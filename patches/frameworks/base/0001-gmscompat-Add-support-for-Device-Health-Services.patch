@@ -71,10 +71,10 @@ index 39be2e3df379..dabc03d6d540 100644
  
          if (!ai.enabled) {
 diff --git a/core/java/com/android/internal/pm/pkg/component/ParsedActivityUtils.java b/core/java/com/android/internal/pm/pkg/component/ParsedActivityUtils.java
-index 219e885331ee..662287412aa5 100644
+index 8d5f93b939bd..f4cdb71ae4ae 100644
 --- a/core/java/com/android/internal/pm/pkg/component/ParsedActivityUtils.java
 +++ b/core/java/com/android/internal/pm/pkg/component/ParsedActivityUtils.java
-@@ -507,6 +507,12 @@ public class ParsedActivityUtils {
+@@ -509,6 +509,12 @@ public class ParsedActivityUtils {
              activity.setExported(hasIntentFilters);
          }
  
@@ -88,10 +88,10 @@ index 219e885331ee..662287412aa5 100644
      }
  
 diff --git a/core/java/com/android/internal/pm/pkg/component/ParsedProviderUtils.java b/core/java/com/android/internal/pm/pkg/component/ParsedProviderUtils.java
-index 5c39827a7ec7..1ba05c4f79e4 100644
+index 2b2efd67f078..118795475e6f 100644
 --- a/core/java/com/android/internal/pm/pkg/component/ParsedProviderUtils.java
 +++ b/core/java/com/android/internal/pm/pkg/component/ParsedProviderUtils.java
-@@ -159,6 +159,8 @@ public class ParsedProviderUtils {
+@@ -160,6 +160,8 @@ public class ParsedProviderUtils {
          }
          provider.setAuthority(authority);
  
@@ -101,7 +101,7 @@ index 5c39827a7ec7..1ba05c4f79e4 100644
      }
  
 diff --git a/core/java/com/android/internal/pm/pkg/parsing/PackageParsingHooks.java b/core/java/com/android/internal/pm/pkg/parsing/PackageParsingHooks.java
-index 6b53358d1f15..0941cc259b1d 100644
+index c1ade9ac4d8f..5acefda73fba 100644
 --- a/core/java/com/android/internal/pm/pkg/parsing/PackageParsingHooks.java
 +++ b/core/java/com/android/internal/pm/pkg/parsing/PackageParsingHooks.java
 @@ -3,8 +3,10 @@ package com.android.internal.pm.pkg.parsing;
@@ -115,7 +115,7 @@ index 6b53358d1f15..0941cc259b1d 100644
  import com.android.internal.pm.pkg.component.ParsedService;
  import com.android.internal.pm.pkg.component.ParsedServiceImpl;
  import com.android.internal.pm.pkg.component.ParsedUsesPermission;
-@@ -42,6 +44,15 @@ public class PackageParsingHooks {
+@@ -43,6 +45,15 @@ public class PackageParsingHooks {
          return res;
      }
  
