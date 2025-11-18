@@ -90,57 +90,6 @@ Patches:
 
 These revert userdebug-specific changes to enable USB ports during early boot and for setting the initial value of the USB port security setting to "On".
 
-## Pixel Watch Call Audio Route
-
-Patches:
-* [`0001-Treat-Pixel-Watch-as-watch.patch`](./patches/packages/services/Telecomm/0001-Treat-Pixel-Watch-as-watch.patch)
-
-There is currently a bug on some devices (at least the Pixel 9 Pro XL) where they are not able to see the Pixel Watch's bluetooth device class for some reason. It should be the wearable watch device class (0x2a4704), but the phone thinks it's unclassified (0x001f00). When this happens, the HCI connect request event (0x4) does not show up in the bluetooth snoop log. There is no other packet that mentions the watch's device class.
-
-This causes Android's telecom stack to default to routing call audio to the watch because it relies on the device class to tell the difference between a watch and a regular bluetooth headset.
-
-This patch works around the problem for the Pixel Watch specifically, by just pattern matching the bluetooth device name. It is not a proper fix by any means.
-
-The issue doesn't seem to be reproducible when connecting a Pixel Tablet or Pixel 7 as a secondary device to the Pixel Watch 3. Those devices correctly report the device class:
-
-```
-❯ adb shell 'dumpsys bluetooth_manager | grep "Pixel Watch"'
-    XX:XX:XX:XX:A7:45 [ DUAL ][ 0x2A4704 ] Pixel Watch 3
-```
-
-and the bluetooth snoop log shows the HCI connect request event:
-
-```
-Frame 228: 13 bytes on wire (104 bits), 13 bytes captured (104 bits)
-    Encapsulation type: Bluetooth H4 with linux header (99)
-    Arrival Time: Jul 19, 2025 23:14:59.810525000 EDT
-    UTC Arrival Time: Jul 20, 2025 03:14:59.810525000 UTC
-    Epoch Arrival Time: 1752981299.810525000
-    [Time shift for this packet: 0.000000000 seconds]
-    [Time delta from previous captured frame: 0.379422000 seconds]
-    [Time delta from previous displayed frame: 0.000000000 seconds]
-    [Time since reference or first frame: 27.197543000 seconds]
-    Frame Number: 228
-    Frame Length: 13 bytes (104 bits)
-    Capture Length: 13 bytes (104 bits)
-    [Frame is marked: False]
-    [Frame is ignored: False]
-    Point-to-Point Direction: Received (1)
-    [Protocols in frame: bluetooth:hci_h4:bthci_evt:btcommon]
-Bluetooth
-    [Source: controller]
-    [Destination: host]
-Bluetooth HCI H4
-    [Direction: Rcvd (0x01)]
-    HCI Packet Type: HCI Event (0x04)
-Bluetooth HCI Event - Connect Request
-    Event Code: Connect Request (0x04)
-    Parameter Total Length: 10
-    BD_ADDR: Google_xx:a7:45 (xx:xx:xx:xx:a7:45)
-    Class of Device: 0x2a4704 (Wearable:Wristwatch - services: Networking Capturing Audio)
-    Link Type: ACL connection (Data Channels) (0x01)
-```
-
 ## License
 
 All patches are licensed under Apache 2.0, the same as the original code being patched. Please see [`LICENSE`](./LICENSE) for the full license text.
