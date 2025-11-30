@@ -6,6 +6,7 @@ This repo contains a collection of patches that I apply to my personal GrapheneO
 
 Patches:
 * [`0001-Unconditionally-enable-ro.adb.secure-1.patch`](./patches/build/soong/0001-Unconditionally-enable-ro.adb.secure-1.patch)
+* [`0001-daemon-Block-unauthed-adb-in-recovery-in-userdebug-b.patch`](./patches/bootable/recovery/0001-daemon-Block-unauthed-adb-in-recovery-in-userdebug-b.patch)
 
 This enables `ro.adb.secure=1` unconditionally instead of only for `user` OS builds. This allows adb's normal authorization mechanism to work in `userdebug` builds.
 

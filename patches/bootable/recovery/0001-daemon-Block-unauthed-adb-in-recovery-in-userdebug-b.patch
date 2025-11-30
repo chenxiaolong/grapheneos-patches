@@ -1,0 +1,25 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Andrew Gunnerson <accounts+github@chiller3.com>
+Date: Sun, 30 Nov 2025 16:33:03 -0500
+Subject: [PATCH] daemon: Block unauthed adb in recovery in userdebug builds
+
+---
+ daemon/main.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/daemon/main.cpp b/daemon/main.cpp
+index 14c10c3d..41f3278c 100644
+--- a/daemon/main.cpp
++++ b/daemon/main.cpp
+@@ -220,7 +220,7 @@ int adbd_main() {
+ #if defined(__ANDROID__)
+     bool device_unlocked = android::base::GetProperty("ro.boot.verifiedbootstate", "") == "orange";
+     if (device_unlocked || __android_log_is_debuggable()) {
+-#if defined(__ANDROID_RECOVERY__)
++#if 0 && defined(__ANDROID_RECOVERY__)
+         auth_required = false;  // Bypass authorization when the device transitions to
+         // fastbootd (from recovery). A corrupt userdata image can potentially
+         // result in the device falling into rescue, and a subsequent fastboot
+-- 
+2.52.0
+
