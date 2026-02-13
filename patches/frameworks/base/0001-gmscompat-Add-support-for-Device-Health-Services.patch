@@ -35,13 +35,13 @@ the stock Pixel OS.
  create mode 100644 services/core/java/com/android/server/pm/ext/DeviceHealthServicesHooks.java
 
 diff --git a/core/java/android/ext/PackageId.java b/core/java/android/ext/PackageId.java
-index 7bd6c61f3df6..f27e7315fe15 100644
+index 2784ba86b84e..47ad2a2f0f29 100644
 --- a/core/java/android/ext/PackageId.java
 +++ b/core/java/android/ext/PackageId.java
-@@ -54,4 +54,7 @@ public interface PackageId {
- 
-     /** @hide */ String BUGLE_NAME = "com.google.android.apps.messaging";
+@@ -56,4 +56,7 @@ public interface PackageId {
      /** @hide */ int BUGLE = 14;
+ 
+     /** @hide */ String SYSTEM_KEYBOARD = "com.android.inputmethod.latin";
 +
 +    /** @hide */ String DEVICE_HEALTH_SERVICES_NAME = "com.google.android.apps.turbo";
 +    /** @hide */ int DEVICE_HEALTH_SERVICES = 101;
@@ -341,5 +341,5 @@ index 2f37f0757654..6f8a61369be8 100644
          };
      }
 -- 
-2.51.1
+2.52.0
 

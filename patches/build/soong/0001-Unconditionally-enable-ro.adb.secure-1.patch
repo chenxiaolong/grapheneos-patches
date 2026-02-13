@@ -8,10 +8,10 @@ Subject: [PATCH] Unconditionally enable ro.adb.secure=1
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/scripts/gen_build_prop.py b/scripts/gen_build_prop.py
-index 4a87f1c64..cda99dbba 100644
+index 63287106c..7d4d4d612 100644
 --- a/scripts/gen_build_prop.py
 +++ b/scripts/gen_build_prop.py
-@@ -327,9 +327,9 @@ def append_additional_system_props(args):
+@@ -320,9 +320,9 @@ def append_additional_system_props(args):
      props.append("ro.secure=1")
      props.append("security.perf_harden=1")
  
@@ -23,5 +23,5 @@ index 4a87f1c64..cda99dbba 100644
        enable_dalvik_lock_contention_logging = False
      else:
 -- 
-2.51.1
+2.52.0
 

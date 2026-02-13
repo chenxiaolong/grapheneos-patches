@@ -8,10 +8,10 @@ Subject: [PATCH] Keep external ports disabled at boot on userdebug builds
  1 file changed, 7 deletions(-)
 
 diff --git a/init/Android.bp b/init/Android.bp
-index 7f98f5afb..fcbb38020 100644
+index 6f50c0900..1cf21f61c 100644
 --- a/init/Android.bp
 +++ b/init/Android.bp
-@@ -127,9 +127,6 @@ libinit_cc_defaults {
+@@ -139,9 +139,6 @@ libinit_cc_defaults {
      product_variables: {
          debuggable: {
              cppflags: [
@@ -21,7 +21,7 @@ index 7f98f5afb..fcbb38020 100644
                  "-UALLOW_FIRST_STAGE_CONSOLE",
                  "-DALLOW_FIRST_STAGE_CONSOLE=1",
                  "-UALLOW_LOCAL_PROP_OVERRIDE",
-@@ -428,10 +425,6 @@ init_first_stage_cc_defaults {
+@@ -451,10 +448,6 @@ init_first_stage_cc_defaults {
      product_variables: {
          debuggable: {
              cflags: [
@@ -33,5 +33,5 @@ index 7f98f5afb..fcbb38020 100644
                  "-DALLOW_FIRST_STAGE_CONSOLE=1",
  
 -- 
-2.51.1
+2.52.0
 

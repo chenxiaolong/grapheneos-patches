@@ -10,7 +10,7 @@ This reverts commit 02e2ada43ab991720b6cbb2119ea0a3548dbc216.
  1 file changed, 1 insertion(+), 5 deletions(-)
 
 diff --git a/core/java/android/ext/settings/UsbPortSecurity.java b/core/java/android/ext/settings/UsbPortSecurity.java
-index f58771714ac8..bdfa1c1347d8 100644
+index d4a55db60038..e9728813c7e2 100644
 --- a/core/java/android/ext/settings/UsbPortSecurity.java
 +++ b/core/java/android/ext/settings/UsbPortSecurity.java
 @@ -1,7 +1,5 @@
@@ -20,16 +20,16 @@ index f58771714ac8..bdfa1c1347d8 100644
 -
  /** @hide */
  public class UsbPortSecurity {
-     public static final int MODE_DISABLED = 0;
+     public static final int MODE_ALL_PORTS_DISABLED = 0;
 @@ -14,7 +12,5 @@ public class UsbPortSecurity {
  
      // keep in sync with USB HAL implementations that check this sysprop during init
      public static final IntSysProperty MODE_SETTING = new IntSysProperty(
 -            "persist.security.usb_mode",
 -            // USB adb access is needed for debugging early boot failures
--            Build.IS_DEBUGGABLE ? MODE_ENABLED : MODE_CHARGING_ONLY_WHEN_LOCKED);
+-            Build.IS_DEBUGGABLE ? MODE_ALL_PORTS_ENABLED : MODE_CHARGING_ONLY_WHEN_LOCKED);
 +            "persist.security.usb_mode", MODE_CHARGING_ONLY_WHEN_LOCKED);
  }
 -- 
-2.51.1
+2.52.0
 

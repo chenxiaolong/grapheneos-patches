@@ -8,7 +8,7 @@ Subject: [PATCH] Use Pixel default boot animation
  1 file changed, 2 deletions(-)
 
 diff --git a/config/device/common/file-exclusion.yml b/config/device/common/file-exclusion.yml
-index 4cf1e151..7d2ddc52 100644
+index e45fea29..e3dd1de3 100644
 --- a/config/device/common/file-exclusion.yml
 +++ b/config/device/common/file-exclusion.yml
 @@ -67,8 +67,6 @@ filters:
@@ -21,5 +21,5 @@ index 4cf1e151..7d2ddc52 100644
        - product/priv-app/DMService/lib/arm/libdmjavaplugin.so
        - product/priv-app/DMService/lib/arm64/libdmengine.so
 -- 
-2.51.1
+2.52.0
 
