@@ -1,7 +1,7 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Andrew Gunnerson <accounts+github@chiller3.com>
 Date: Thu, 3 Jul 2025 15:18:20 -0400
-Subject: [PATCH 2/2] Revert "don't enable port security restrictions by
+Subject: [PATCH 2/3] Revert "don't enable port security restrictions by
  default on debug builds"
 
 This reverts commit 02e2ada43ab991720b6cbb2119ea0a3548dbc216.
@@ -31,5 +31,5 @@ index d4a55db60038..e9728813c7e2 100644
 +            "persist.security.usb_mode", MODE_CHARGING_ONLY_WHEN_LOCKED);
  }
 -- 
-2.52.0
+2.53.0
 

@@ -1,0 +1,38 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Andrew Gunnerson <accounts+github@chiller3.com>
+Date: Thu, 12 Feb 2026 19:38:41 -0500
+Subject: [PATCH 3/3] Revert "FusedLocationProvider: restore pre-16-QPR1 GNSS
+ usage policy"
+
+This reverts commit 64a98a522797bafa48f3c4da1e8a0f8192a42384.
+---
+ .../com/android/location/fused/FusedLocationProvider.java   | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/packages/FusedLocation/src/com/android/location/fused/FusedLocationProvider.java b/packages/FusedLocation/src/com/android/location/fused/FusedLocationProvider.java
+index b87aa55c3721..62d118beecb9 100644
+--- a/packages/FusedLocation/src/com/android/location/fused/FusedLocationProvider.java
++++ b/packages/FusedLocation/src/com/android/location/fused/FusedLocationProvider.java
+@@ -62,6 +62,9 @@ public class FusedLocationProvider extends LocationProviderBase {
+                 .build();
+ 
+     private static final long MAX_LOCATION_COMPARISON_NS = 11 * 1000000000L; // 11 seconds
++    // Maximum request interval at which we will activate GPS (because GPS sometimes consumes
++    // excessive power with large intervals).
++    private static final long MAX_GPS_INTERVAL_MS = 5 * 1000; // 5 seconds
+ 
+     private final Object mLock = new Object();
+ 
+@@ -168,7 +171,8 @@ public class FusedLocationProvider extends LocationProviderBase {
+             mNlpPresent = mLocationManager.hasProvider(NETWORK_PROVIDER);
+         }
+ 
+-        boolean requestAllowsGps = !mNlpPresent || mRequest.getQuality() < LocationRequest.QUALITY_LOW_POWER;
++        boolean requestAllowsGps = mRequest.getQuality() == QUALITY_HIGH_ACCURACY
++                && mRequest.getIntervalMillis() <= MAX_GPS_INTERVAL_MS;
+         long gpsInterval =
+                 mGpsPresent && requestAllowsGps
+                         ? mRequest.getIntervalMillis() : INTERVAL_DISABLED;
+-- 
+2.53.0
+

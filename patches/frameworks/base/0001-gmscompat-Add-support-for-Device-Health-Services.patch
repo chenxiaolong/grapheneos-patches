@@ -1,7 +1,7 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Andrew Gunnerson <accounts+github@chiller3.com>
 Date: Wed, 22 Jan 2025 23:41:08 -0500
-Subject: [PATCH 1/2] gmscompat: Add support for Device Health Services
+Subject: [PATCH 1/3] gmscompat: Add support for Device Health Services
 
 This adds support for installing com.google.android.apps.turbo as a user
 app. It is given access only to the system permissions necessary for the
@@ -47,7 +47,7 @@ index 2784ba86b84e..47ad2a2f0f29 100644
 +    /** @hide */ int DEVICE_HEALTH_SERVICES = 101;
  }
 diff --git a/core/java/com/android/internal/gmscompat/sysservice/GmcPackageManager.java b/core/java/com/android/internal/gmscompat/sysservice/GmcPackageManager.java
-index 39be2e3df379..dabc03d6d540 100644
+index 3fe16a1a21a4..9a91d4e6a63a 100644
 --- a/core/java/com/android/internal/gmscompat/sysservice/GmcPackageManager.java
 +++ b/core/java/com/android/internal/gmscompat/sysservice/GmcPackageManager.java
 @@ -20,6 +20,7 @@ import android.annotation.NonNull;
@@ -58,7 +58,7 @@ index 39be2e3df379..dabc03d6d540 100644
  import android.app.Application;
  import android.app.ApplicationPackageManager;
  import android.app.compat.gms.GmsCompat;
-@@ -118,6 +119,11 @@ public class GmcPackageManager extends ApplicationPackageManager {
+@@ -120,6 +121,11 @@ public class GmcPackageManager extends ApplicationPackageManager {
              if (GmsCompat.isGmsCore() || GmsCompat.isClientOfGmsCore(ai)) {
                  ai.flags |= ApplicationInfo.FLAG_SYSTEM | ApplicationInfo.FLAG_UPDATED_SYSTEM_APP;
              }
@@ -341,5 +341,5 @@ index 2f37f0757654..6f8a61369be8 100644
          };
      }
 -- 
-2.52.0
+2.53.0
 

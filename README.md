@@ -91,6 +91,13 @@ Patches:
 
 These revert userdebug-specific changes to enable USB ports during early boot and for setting the initial value of the USB port security setting to "On".
 
+## GNSS usage policy
+
+Patches:
+* [`0003-Revert-FusedLocationProvider-restore-pre-16-QPR1-GNS.patch`](./patches/frameworks/base/0003-Revert-FusedLocationProvider-restore-pre-16-QPR1-GNS.patch)
+
+I use GrapheneOS' network location feature and with the third party apps I have installed, the new beavhior introduced in AOSP 16 QPR1 results in significantly less battery usage.
+
 ## Stock boot animation
 
 Patches:
