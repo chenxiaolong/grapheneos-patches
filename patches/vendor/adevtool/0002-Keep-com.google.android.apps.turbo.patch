@@ -1,0 +1,73 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Andrew Gunnerson <accounts+github@chiller3.com>
+Date: Wed, 22 Apr 2026 23:08:50 -0400
+Subject: [PATCH 2/2] Keep com.google.android.apps.turbo
+
+This is an optional patch to include the Device Health Services app in
+the OS image. The DeviceHealthServicesHooks class is still written with
+the assumption that the app will be installed as a user app.
+---
+ config/device/common/apk.yml                 | 27 +++++++++++++++++++-
+ config/device/common/sysconfig-exclusion.yml |  1 +
+ 2 files changed, 27 insertions(+), 1 deletion(-)
+
+diff --git a/config/device/common/apk.yml b/config/device/common/apk.yml
+index 4d5b7aac1..287a0d76d 100644
+--- a/config/device/common/apk.yml
++++ b/config/device/common/apk.yml
+@@ -282,6 +282,32 @@ package_inclusions:
+       - android.permission.READ_PHONE_STATE
+       - android.permission.READ_PRIVILEGED_PHONE_STATE
+ 
++  # Handled by frameworks/base/services/core/java/com/android/server/pm/ext/DeviceHealthServicesHooks.java
++  com.google.android.apps.turbo:
++    include_uses_permissions:
++      - android.permission.ACCESS_AMBIENT_LIGHT_STATS
++      - android.permission.BRIGHTNESS_SLIDER_USAGE
++      - android.permission.CONFIGURE_DISPLAY_BRIGHTNESS
++    pregrantable_permissions:
++      - android.permission.ACCESS_AMBIENT_LIGHT_STATS
++      - android.permission.BRIGHTNESS_SLIDER_USAGE
++      - android.permission.CONFIGURE_DISPLAY_BRIGHTNESS
++    remove_permissions:
++      # default-permissions
++      - android.permission.POST_NOTIFICATIONS
++      # privapp-permissions
++      - android.permission.BATTERY_PREDICTION
++      - android.permission.BATTERY_STATS
++      - android.permission.CHANGE_APP_IDLE_STATE
++      - android.permission.CHANGE_APP_LAUNCH_TIME_ESTIMATE
++      - android.permission.DUMP
++      - android.permission.PACKAGE_USAGE_STATS
++      - android.permission.POWER_SAVER
++      - android.permission.REAL_GET_TASKS
++      - android.permission.START_ACTIVITIES_FROM_BACKGROUND
++      - android.permission.SUBSTITUTE_NOTIFICATION_APP_NAME
++      - android.permission.WRITE_SECURE_SETTINGS
++
+   com.google.euiccpixel:
+     max_known_version: 20185
+     include_uses_permissions:
+@@ -599,7 +625,6 @@ package_exclusions:
+   - com.google.android.apps.scone # Adaptive Connectivity Services, see https://support.google.com/product-documentation/answer/12321563
+   - com.google.android.apps.setupwizard.searchselector
+   - com.google.android.apps.stargate
+-  - com.google.android.apps.turbo # Device Health Services
+   - com.google.android.apps.tycho # Google Fi
+   - com.google.android.appsearch
+   - com.google.android.appsearch.apk
+diff --git a/config/device/common/sysconfig-exclusion.yml b/config/device/common/sysconfig-exclusion.yml
+index d068b889d..2d3c4b231 100644
+--- a/config/device/common/sysconfig-exclusion.yml
++++ b/config/device/common/sysconfig-exclusion.yml
+@@ -28,6 +28,7 @@ sysconfig_exclusions:
+   - <allow-implicit-broadcast action="com.google.android.onetimeinitializer.ONE_TIME_INITIALIZED"/>
+   - <allow-implicit-broadcast action="com.google.gservices.intent.action.GSERVICES_CHANGED"/>
+   - <allow-implicit-broadcast action="com.google.gservices.intent.action.GSERVICES_OVERRIDE"/>
++  - <allow-in-power-save-except-idle package="com.google.android.apps.turbo"/>
+   - <assign-permission name="com.android.permission.INJECT_OMADM_SETTINGS" uid="shell"/>
+   - <backup-transport-whitelisted-service service="com.google.android.apps.restore/.transport.BackupTransportService"/>
+   - <backup-transport-whitelisted-service service="com.google.android.apps.restore/.transport.D2dTransportService"/>
+-- 
+2.53.0
+

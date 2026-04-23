@@ -1,14 +1,15 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Andrew Gunnerson <accounts+github@chiller3.com>
 Date: Mon, 7 Jul 2025 13:41:05 -0400
-Subject: [PATCH] Use Pixel default boot animation
+Subject: [PATCH 1/2] Use Pixel default boot animation
 
 ---
  config/device/common/file-exclusion.yml | 2 --
- 1 file changed, 2 deletions(-)
+ config/device/common/file-inclusion.yml | 2 ++
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/config/device/common/file-exclusion.yml b/config/device/common/file-exclusion.yml
-index e45fea29..e3dd1de3 100644
+index e45fea294..e3dd1de32 100644
 --- a/config/device/common/file-exclusion.yml
 +++ b/config/device/common/file-exclusion.yml
 @@ -67,8 +67,6 @@ filters:
@@ -20,6 +21,19 @@ index e45fea29..e3dd1de3 100644
        - product/priv-app/DMService/lib/arm/libdmengine.so
        - product/priv-app/DMService/lib/arm/libdmjavaplugin.so
        - product/priv-app/DMService/lib/arm64/libdmengine.so
+diff --git a/config/device/common/file-inclusion.yml b/config/device/common/file-inclusion.yml
+index ceed55478..745272f96 100644
+--- a/config/device/common/file-inclusion.yml
++++ b/config/device/common/file-inclusion.yml
+@@ -2,6 +2,8 @@ filters:
+   file_inclusions:
+     prefix:
+       - product/etc/CarrierSettings/
++      - product/media/bootanimation-dark.zip
++      - product/media/bootanimation.zip
+       - recovery/init.recovery.
+       - recovery/res/images/loop000
+       - vendor/etc/bluetooth_power_limits
 -- 
-2.52.0
+2.53.0
 

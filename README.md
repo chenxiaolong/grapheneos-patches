@@ -14,6 +14,7 @@ This enables `ro.adb.secure=1` unconditionally instead of only for `user` OS bui
 
 Patches:
 * [`0001-gmscompat-Add-support-for-Device-Health-Services.patch`](./patches/frameworks/base/0001-gmscompat-Add-support-for-Device-Health-Services.patch)
+* [`0002-Keep-com.google.android.apps.turbo.patch`](./patches/vendor/adevtool/0002-Keep-com.google.android.apps.turbo.patch) (optional)
 
 This allows using the Pixel OS' adaptive brightness implementation from the [Device Health Services](https://play.google.com/store/apps/details?id=com.google.android.apps.turbo) package.
 
@@ -77,7 +78,9 @@ Android persists this configuration in `/data/system/display-manager-state.xml`.
 
 ### Usage
 
- To use Device Health Services, first install the app. The APK will likely need to be extracted from the stock Pixel OS at `/product/priv-app/TurboPrebuilt/TurboPrebuilt.apk`. Even though the app is hosted in Google Play, it claims the app is incompatible unless the device is running the stock Pixel OS.
+(This is only needed if `0002-Keep-com.google.android.apps.turbo.patch` was not included. Otherwise, the app is included in the OS image.)
+
+To use Device Health Services, first install the app. The APK will likely need to be extracted from the stock Pixel OS at `/product/priv-app/TurboPrebuilt/TurboPrebuilt.apk`. Even though the app is hosted in Google Play, it claims the app is incompatible unless the device is running the stock Pixel OS.
 
 After it is installed, launch it once by going to Android's Settings -> Apps -> Device Health Services -> Storage & cache -> Manage storage. This is necessary because newly installed user apps (and force stopped apps) are not allowed to automatically run until the user manually opens it once, and there's no other easily accessible UI for Device Health Services.
 
