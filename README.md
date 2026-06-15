@@ -108,6 +108,13 @@ Patches:
 
 Personal preference. I like that the screen resolution doesn't change during boot.
 
+## Appcompat properties
+
+Patches:
+* [`0002-Extend-production-workarounds-to-userdebug-as-well.patch`](./patches/build/soong/0002-Extend-production-workarounds-to-userdebug-as-well.patch)
+
+For apps that perform misguided/useless checks.
+
 ## License
 
 All patches are licensed under Apache 2.0, the same as the original code being patched. Please see [`LICENSE`](./LICENSE) for the full license text.
