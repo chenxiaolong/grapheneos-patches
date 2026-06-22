@@ -1,17 +1,17 @@
-From 32c8a3aa11b9ff99bca39da80743fca3ed1e52be Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Ximin Luo <infinity0@pwned.gg>
 Date: Sat, 13 Jun 2026 10:10:44 +0100
-Subject: [PATCH] Extend production workarounds to userdebug as well
+Subject: [PATCH 2/2] Extend production workarounds to userdebug as well
 
 ---
  scripts/gen_build_prop.py | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/scripts/gen_build_prop.py b/scripts/gen_build_prop.py
-index 3dfeaf5..7904828 100644
+index b53885fc8..27957351f 100644
 --- a/scripts/gen_build_prop.py
 +++ b/scripts/gen_build_prop.py
-@@ -372,7 +372,7 @@ def append_additional_system_props(args):
+@@ -384,7 +384,7 @@ def append_additional_system_props(args):
  
    props.append("ro.control_privapp_permissions=enforce")
    props.append("net.tethering.noprovisioning=true")
@@ -21,5 +21,5 @@ index 3dfeaf5..7904828 100644
      props.append("ro.appcompat_override.ro.boot.verifiedbootstate=green")
  
 -- 
-2.53.0
+2.54.0
 

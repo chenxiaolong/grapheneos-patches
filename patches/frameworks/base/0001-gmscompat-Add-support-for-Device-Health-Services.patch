@@ -71,10 +71,10 @@ index 3fe16a1a21a4..9a91d4e6a63a 100644
  
          if (!ai.enabled) {
 diff --git a/core/java/com/android/internal/pm/pkg/component/ParsedActivityUtils.java b/core/java/com/android/internal/pm/pkg/component/ParsedActivityUtils.java
-index 8d5f93b939bd..f4cdb71ae4ae 100644
+index 210638066426..9fc7db1ec3e0 100644
 --- a/core/java/com/android/internal/pm/pkg/component/ParsedActivityUtils.java
 +++ b/core/java/com/android/internal/pm/pkg/component/ParsedActivityUtils.java
-@@ -509,6 +509,12 @@ public class ParsedActivityUtils {
+@@ -532,6 +532,12 @@ public class ParsedActivityUtils {
              activity.setExported(hasIntentFilters);
          }
  
@@ -88,10 +88,10 @@ index 8d5f93b939bd..f4cdb71ae4ae 100644
      }
  
 diff --git a/core/java/com/android/internal/pm/pkg/component/ParsedProviderUtils.java b/core/java/com/android/internal/pm/pkg/component/ParsedProviderUtils.java
-index 2b2efd67f078..118795475e6f 100644
+index b0f7e6dbd09f..30ccc0541473 100644
 --- a/core/java/com/android/internal/pm/pkg/component/ParsedProviderUtils.java
 +++ b/core/java/com/android/internal/pm/pkg/component/ParsedProviderUtils.java
-@@ -160,6 +160,8 @@ public class ParsedProviderUtils {
+@@ -164,6 +164,8 @@ public class ParsedProviderUtils {
          }
          provider.setAuthority(authority);
  
@@ -101,7 +101,7 @@ index 2b2efd67f078..118795475e6f 100644
      }
  
 diff --git a/core/java/com/android/internal/pm/pkg/parsing/PackageParsingHooks.java b/core/java/com/android/internal/pm/pkg/parsing/PackageParsingHooks.java
-index c1ade9ac4d8f..5acefda73fba 100644
+index 750fb0ff3a56..7d3a9c9e8d66 100644
 --- a/core/java/com/android/internal/pm/pkg/parsing/PackageParsingHooks.java
 +++ b/core/java/com/android/internal/pm/pkg/parsing/PackageParsingHooks.java
 @@ -3,8 +3,10 @@ package com.android.internal.pm.pkg.parsing;
@@ -308,10 +308,10 @@ index 000000000000..8264b976c808
 +    }
 +}
 diff --git a/services/core/java/com/android/server/pm/ext/PackageExtInit.java b/services/core/java/com/android/server/pm/ext/PackageExtInit.java
-index 256c3c815101..d42cdeae7fc9 100644
+index 9eeff7579f48..a6e62947c0ed 100644
 --- a/services/core/java/com/android/server/pm/ext/PackageExtInit.java
 +++ b/services/core/java/com/android/server/pm/ext/PackageExtInit.java
-@@ -102,6 +102,8 @@ public class PackageExtInit implements ParsingPackageUtils.PackageExtInitIface {
+@@ -89,6 +89,8 @@ public class PackageExtInit implements ParsingPackageUtils.PackageExtInitIface {
                      "295499d8d0e93b7ed64f90e8cddffc12e3be23d8806f54e05d1abf415c37f5ba");
              case BUGLE_NAME -> validate(BUGLE, 273168063L,
                      "f7e73d4edc2b7f55eecd3f898d3cca7da9cbbf51694eba14f816e2eccf015035");
@@ -341,5 +341,5 @@ index 2f37f0757654..6f8a61369be8 100644
          };
      }
 -- 
-2.53.0
+2.54.0
 

@@ -8,10 +8,10 @@ Subject: [PATCH] daemon: Block unauthed adb in recovery in userdebug builds
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/daemon/main.cpp b/daemon/main.cpp
-index 14c10c3d..41f3278c 100644
+index 3d3f3024..4b521367 100644
 --- a/daemon/main.cpp
 +++ b/daemon/main.cpp
-@@ -220,7 +220,7 @@ int adbd_main() {
+@@ -222,7 +222,7 @@ int adbd_main() {
  #if defined(__ANDROID__)
      bool device_unlocked = android::base::GetProperty("ro.boot.verifiedbootstate", "") == "orange";
      if (device_unlocked || __android_log_is_debuggable()) {
@@ -21,5 +21,5 @@ index 14c10c3d..41f3278c 100644
          // fastbootd (from recovery). A corrupt userdata image can potentially
          // result in the device falling into rescue, and a subsequent fastboot
 -- 
-2.52.0
+2.54.0
 

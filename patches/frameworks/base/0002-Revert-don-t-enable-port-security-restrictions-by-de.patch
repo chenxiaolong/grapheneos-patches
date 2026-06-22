@@ -31,5 +31,5 @@ index d4a55db60038..e9728813c7e2 100644
 +            "persist.security.usb_mode", MODE_CHARGING_ONLY_WHEN_LOCKED);
  }
 -- 
-2.53.0
+2.54.0
 

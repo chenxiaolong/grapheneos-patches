@@ -12,12 +12,12 @@ the assumption that the app will be installed as a user app.
  2 files changed, 27 insertions(+), 1 deletion(-)
 
 diff --git a/config/device/common/apk.yml b/config/device/common/apk.yml
-index 4d5b7aac1..287a0d76d 100644
+index baa2511cf..e1bb43f18 100644
 --- a/config/device/common/apk.yml
 +++ b/config/device/common/apk.yml
-@@ -282,6 +282,32 @@ package_inclusions:
-       - android.permission.READ_PHONE_STATE
+@@ -293,6 +293,32 @@ package_inclusions:
        - android.permission.READ_PRIVILEGED_PHONE_STATE
+       - android.permission.UPDATE_DEVICE_STATS
  
 +  # Handled by frameworks/base/services/core/java/com/android/server/pm/ext/DeviceHealthServicesHooks.java
 +  com.google.android.apps.turbo:
@@ -46,9 +46,9 @@ index 4d5b7aac1..287a0d76d 100644
 +      - android.permission.WRITE_SECURE_SETTINGS
 +
    com.google.euiccpixel:
-     max_known_version: 20185
+     max_known_version: 20205
      include_uses_permissions:
-@@ -599,7 +625,6 @@ package_exclusions:
+@@ -626,7 +652,6 @@ package_exclusions:
    - com.google.android.apps.scone # Adaptive Connectivity Services, see https://support.google.com/product-documentation/answer/12321563
    - com.google.android.apps.setupwizard.searchselector
    - com.google.android.apps.stargate
@@ -57,10 +57,10 @@ index 4d5b7aac1..287a0d76d 100644
    - com.google.android.appsearch
    - com.google.android.appsearch.apk
 diff --git a/config/device/common/sysconfig-exclusion.yml b/config/device/common/sysconfig-exclusion.yml
-index d068b889d..2d3c4b231 100644
+index 21a6a2d6e..ffc9f1024 100644
 --- a/config/device/common/sysconfig-exclusion.yml
 +++ b/config/device/common/sysconfig-exclusion.yml
-@@ -28,6 +28,7 @@ sysconfig_exclusions:
+@@ -43,6 +43,7 @@ sysconfig_exclusions:
    - <allow-implicit-broadcast action="com.google.android.onetimeinitializer.ONE_TIME_INITIALIZED"/>
    - <allow-implicit-broadcast action="com.google.gservices.intent.action.GSERVICES_CHANGED"/>
    - <allow-implicit-broadcast action="com.google.gservices.intent.action.GSERVICES_OVERRIDE"/>
@@ -69,5 +69,5 @@ index d068b889d..2d3c4b231 100644
    - <backup-transport-whitelisted-service service="com.google.android.apps.restore/.transport.BackupTransportService"/>
    - <backup-transport-whitelisted-service service="com.google.android.apps.restore/.transport.D2dTransportService"/>
 -- 
-2.53.0
+2.54.0
 

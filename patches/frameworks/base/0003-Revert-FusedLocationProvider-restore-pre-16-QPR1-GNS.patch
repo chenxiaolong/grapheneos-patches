@@ -34,5 +34,5 @@ index b87aa55c3721..62d118beecb9 100644
                  mGpsPresent && requestAllowsGps
                          ? mRequest.getIntervalMillis() : INTERVAL_DISABLED;
 -- 
-2.53.0
+2.54.0
 
