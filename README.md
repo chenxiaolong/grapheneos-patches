@@ -10,6 +10,15 @@ Patches:
 
 This enables `ro.adb.secure=1` unconditionally instead of only for `user` OS builds. This allows adb's normal authorization mechanism to work in `userdebug` builds.
 
+## Optional location EXIF redaction in DocumentsUI
+
+Patches:
+* [`0001-Add-ACCESS_MEDIA_LOCATION-permission.patch`](./patches/packages/apps/DocumentsUI/0001-Add-ACCESS_MEDIA_LOCATION-permission.patch)
+
+This adds the optional `ACCESS_MEDIA_LOCATION` permission to DocumentsUI ("Files" app). Without this, Android's MediaProvider component will always strip out the location EXIF tags when copying image files (or moving image files to a different SAF provider, which requires copy + delete).
+
+This does not add any UI for requesting the permission. It must be granted manually from Android's settings.
+
 ## Adaptive brightness
 
 Patches:
