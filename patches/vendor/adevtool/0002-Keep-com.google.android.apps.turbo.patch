@@ -12,7 +12,7 @@ the assumption that the app will be installed as a user app.
  2 files changed, 27 insertions(+), 1 deletion(-)
 
 diff --git a/config/device/common/apk.yml b/config/device/common/apk.yml
-index baa2511cf..e1bb43f18 100644
+index f1d28f69d..28db8995e 100644
 --- a/config/device/common/apk.yml
 +++ b/config/device/common/apk.yml
 @@ -293,6 +293,32 @@ package_inclusions:
@@ -46,7 +46,7 @@ index baa2511cf..e1bb43f18 100644
 +      - android.permission.WRITE_SECURE_SETTINGS
 +
    com.google.euiccpixel:
-     max_known_version: 20205
+     max_known_version: 20225
      include_uses_permissions:
 @@ -626,7 +652,6 @@ package_exclusions:
    - com.google.android.apps.scone # Adaptive Connectivity Services, see https://support.google.com/product-documentation/answer/12321563
@@ -69,5 +69,5 @@ index 21a6a2d6e..ffc9f1024 100644
    - <backup-transport-whitelisted-service service="com.google.android.apps.restore/.transport.BackupTransportService"/>
    - <backup-transport-whitelisted-service service="com.google.android.apps.restore/.transport.D2dTransportService"/>
 -- 
-2.54.0
+2.55.0
 

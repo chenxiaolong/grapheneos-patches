@@ -101,12 +101,12 @@ Patches:
 
 I use GrapheneOS' network location feature and with the third party apps I have installed, the new beavhior introduced in AOSP 16 QPR1 results in significantly less battery usage.
 
-## Stock boot animation
+## Stock OS media assets
 
 Patches:
-* [`0001-Use-Pixel-default-boot-animation.patch`](./patches/vendor/adevtool/0001-Use-Pixel-default-boot-animation.patch)
+* [`0001-Keep-stock-OS-media-assets.patch`](./patches/vendor/adevtool/0001-Keep-stock-OS-media-assets.patch)
 
-Personal preference. I like that the screen resolution doesn't change during boot.
+Personal preference. For the boot animation, I like that the screen resolution doesn't change during boot.
 
 ## Appcompat properties
 
