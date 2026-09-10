@@ -4,14 +4,14 @@ Date: Sat, 22 Aug 2026 01:53:06 -0400
 Subject: [PATCH 1/2] Keep stock OS media assets
 
 ---
- config/device/common/file-exclusion.yml    | 12 ------------
- config/device/common/file-inclusion.yml    | 12 ++++++++++++
+ config/device/common/file-exclusion.yml    | 14 --------------
+ config/device/common/file-inclusion.yml    | 14 ++++++++++++++
  config/device/common/overlay-inclusion.yml |  8 ++++++++
  config/device/common/overlay-removal.yml   |  7 -------
- 4 files changed, 20 insertions(+), 19 deletions(-)
+ 4 files changed, 22 insertions(+), 21 deletions(-)
 
 diff --git a/config/device/common/file-exclusion.yml b/config/device/common/file-exclusion.yml
-index 9559ef0f9..64411d7fb 100644
+index 3f625b31c..57a38b157 100644
 --- a/config/device/common/file-exclusion.yml
 +++ b/config/device/common/file-exclusion.yml
 @@ -7,10 +7,6 @@ filters:
@@ -45,17 +45,19 @@ index 9559ef0f9..64411d7fb 100644
        - product/fonts/Karla-Regular.ttf
        - product/fonts/Lato-Bold.ttf
        - product/fonts/Lato-BoldItalic.ttf
-@@ -68,8 +58,6 @@ filters:
+@@ -68,10 +58,6 @@ filters:
        - product/fonts/ZillaSlab-SemiBoldItalic.ttf
        - product/framework/com.google.android.dialer.support.jar
        - product/framework/libhwinfo.jar
+-      - product/media/bootanimation-2026.zip
+-      - product/media/bootanimation-dark-2026.zip
 -      - product/media/bootanimation-dark.zip
 -      - product/media/bootanimation.zip
-       - product/priv-app/DMService/lib/arm/libdmengine.so
-       - product/priv-app/DMService/lib/arm/libdmjavaplugin.so
-       - product/priv-app/DMService/lib/arm64/libdmengine.so
+       - product/media/vibration/notification/Blip.xml
+       - product/media/vibration/notification/Classic_notification.xml
+       - product/media/vibration/notification/Fireworks.xml
 diff --git a/config/device/common/file-inclusion.yml b/config/device/common/file-inclusion.yml
-index cf6069b7d..9a88e0d79 100644
+index 1c2ff4085..065240357 100644
 --- a/config/device/common/file-inclusion.yml
 +++ b/config/device/common/file-inclusion.yml
 @@ -2,6 +2,10 @@ filters:
@@ -69,7 +71,7 @@ index cf6069b7d..9a88e0d79 100644
        - recovery/init.recovery.
        - recovery/res/images/loop000
        - vendor/etc/bluetooth_power_limits
-@@ -26,11 +30,19 @@ filters:
+@@ -26,11 +30,21 @@ filters:
        - product/etc/felica/common.cfg
        - product/etc/felica/mfm.cfg
        - product/etc/felica/mfs.cfg
@@ -84,13 +86,15 @@ index cf6069b7d..9a88e0d79 100644
        - product/lib/libdmjavaplugin.so
        - product/lib64/libdmengine.so
        - product/lib64/libdmjavaplugin.so
++      - product/media/bootanimation-2026.zip
++      - product/media/bootanimation-dark-2026.zip
 +      - product/media/bootanimation-dark.zip
 +      - product/media/bootanimation.zip
        - recovery/lib/firmware/brcm/BCM.hcd
        - recovery/lib/firmware/brcm/BCM_D.hcd
        - recovery/lib/firmware/brcm/BTFW_B.hcd
 diff --git a/config/device/common/overlay-inclusion.yml b/config/device/common/overlay-inclusion.yml
-index 9a4a50aa4..73b5b17f5 100644
+index fc186bd71..455f2b5bb 100644
 --- a/config/device/common/overlay-inclusion.yml
 +++ b/config/device/common/overlay-inclusion.yml
 @@ -9,6 +9,8 @@ filters:
@@ -100,9 +104,9 @@ index 9a4a50aa4..73b5b17f5 100644
 +    suffix:
 +      - string/config_headlineFontFamily = google-sans
      match:
+       - "android:color/config_notificationPriorityLightColorDefault = #ff00d4a3"
        - "android:string/config_dozeComponent =\ "
-       - "com.android.settings:string/help_uri_alarms_and_reminders =\ "
-@@ -479,6 +481,9 @@ filters:
+@@ -499,6 +501,9 @@ filters:
        - android:string/concurrent_display_notification_thermal_content|*
        - android:string/config_ambientContextEventArrayExtraKey = EVENT_ARRAY
        - android:string/config_ambientContextPackageNameExtraKey = PACKAGE_NAME
@@ -112,7 +116,7 @@ index 9a4a50aa4..73b5b17f5 100644
        - android:string/config_computerControlReferenceDisplayPhysicalAddress = 4619827677550801153
        - android:string/config_defaultAccessibilityNotificationSound = Effect_Tick.ogg
        - android:string/config_deviceSpecificDeviceStatePolicyProvider|*
-@@ -487,6 +492,7 @@ filters:
+@@ -507,6 +512,7 @@ filters:
        - android:string/config_dozeComponent = com.android.systemui/com.android.systemui.doze.DozeService
        - android:string/config_dozeTapSensorType = com.google.sensor.single_touch
        - android:string/config_dozeUdfpsLongPressSensorType = com.google.sensor.long_press
@@ -120,7 +124,7 @@ index 9a4a50aa4..73b5b17f5 100644
        - android:string/config_icon_mask|*
        - android:string/config_mainBuiltInDisplayCutoutRectApproximation|*
        - android:string/config_mainBuiltInDisplayCutout|*
-@@ -778,6 +784,8 @@ filters:
+@@ -799,6 +805,8 @@ filters:
        - com.android.documentsui/DocumentsUICustomization:drawable/ic_sd_storage = 8f9cc5be5aff54b3a870e69278d91b88f951c7c061e5ce540b9c53c7205fa773
        - com.android.documentsui/DocumentsUICustomization:drawable/root_list_selector = 51067013556e28da30da6979f90d55177b99899f74d5587f9136bd23650d3e63
        - com.android.documentsui/DocumentsUICustomization:drawable/root_list_selector|ldrtl = f5bb06504ad12e8ef4cfbc42eda8b2cbda84486a60b21ca945208f99885b5565
@@ -130,7 +134,7 @@ index 9a4a50aa4..73b5b17f5 100644
        - com.android.hbmsvmanager:array/config_calibrated_compensation_images|*
        - com.android.hbmsvmanager:array/config_compensation_brightness_conditions|*
 diff --git a/config/device/common/overlay-removal.yml b/config/device/common/overlay-removal.yml
-index 36994337b..84f41bc90 100644
+index e50ddc357..107c3dfba 100644
 --- a/config/device/common/overlay-removal.yml
 +++ b/config/device/common/overlay-removal.yml
 @@ -47,7 +47,6 @@ filters:
@@ -141,7 +145,7 @@ index 36994337b..84f41bc90 100644
      match:
        - "android:array/config_notificationMsgPkgsAllowedAsConvos =\ " # already empty in fw/base
        - "android:string/config_satellite_service_package =\ " # already empty in fw/base
-@@ -205,9 +204,6 @@ filters:
+@@ -210,9 +209,6 @@ filters:
        - android:string/battery_saver_description_with_learn_more|* # contains reference to "Hey Google" hotword
        - android:string/config_allowlistProviderServicePackage = com.google.android.gms
        - android:string/config_appsAuthorizedForSharedAccounts = ;com.android.vending;com.android.settings;
@@ -151,7 +155,7 @@ index 36994337b..84f41bc90 100644
        - android:string/config_defaultAccessibilityService = com.google.android.marvin.talkback/.TalkBackService
        - android:string/config_defaultAmbientContextConsentComponent = com.google.android.as/com.google.android.apps.miphone.aiai.ambientcontext.ui.ConsentActivity
        - android:string/config_defaultAmbientContextDetectionService = com.google.android.as/com.google.android.apps.miphone.aiai.app.AiAiAmbientContextDetectionService
-@@ -280,7 +276,6 @@ filters:
+@@ -285,7 +281,6 @@ filters:
        - android:string/config_fingerprintFrrTargetComponent = com.android.settings/com.google.android.settings.biometrics.combination.ui.view.FrrCommonNotificationActivity
        - android:string/config_fingerprintFrrTargetComponent = com.android.settings/com.google.android.settings.biometrics.frr.ui.view.FrrNotificationActivity
        - android:string/config_gnssLocationProviderPackageName = com.google.android.gms
@@ -159,7 +163,7 @@ index 36994337b..84f41bc90 100644
        - android:string/config_headlineFontFeatureSettings = ss03
        - android:string/config_healthConnectMigratorPackageName = com.google.android.apps.healthdata
        - android:string/config_help_url_action_disabled_by_advanced_protection = intent:#Intent;action=com.google.android.gms.settings.ADVANCED_PROTECTION;package=com.google.android.gms;end
-@@ -408,8 +403,6 @@ filters:
+@@ -413,8 +408,6 @@ filters:
        - com.android.cellbroadcastservice/CellBroadcastServiceCustomization:array/additional_cell_broadcast_receiver_packages = com.google.android.apps.safetyhub
        - com.android.cellbroadcastservice/CellBroadcastServiceCustomization:array/test_cell_broadcast_receiver_packages = com.googlecode.android_scripting
        - com.android.documentsui/DocumentsUICustomization:bool/is_launcher_enabled = false

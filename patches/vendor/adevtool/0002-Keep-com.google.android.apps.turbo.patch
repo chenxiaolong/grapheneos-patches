@@ -12,10 +12,10 @@ the assumption that the app will be installed as a user app.
  2 files changed, 27 insertions(+), 1 deletion(-)
 
 diff --git a/config/device/common/apk.yml b/config/device/common/apk.yml
-index f1d28f69d..28db8995e 100644
+index 2d75c4207..054d06fda 100644
 --- a/config/device/common/apk.yml
 +++ b/config/device/common/apk.yml
-@@ -293,6 +293,32 @@ package_inclusions:
+@@ -346,6 +346,32 @@ package_inclusions:
        - android.permission.READ_PRIVILEGED_PHONE_STATE
        - android.permission.UPDATE_DEVICE_STATS
  
@@ -46,21 +46,21 @@ index f1d28f69d..28db8995e 100644
 +      - android.permission.WRITE_SECURE_SETTINGS
 +
    com.google.euiccpixel:
-     max_known_version: 20225
+     max_known_version: 20235
      include_uses_permissions:
-@@ -626,7 +652,6 @@ package_exclusions:
+@@ -682,7 +708,6 @@ package_exclusions:
    - com.google.android.apps.scone # Adaptive Connectivity Services, see https://support.google.com/product-documentation/answer/12321563
    - com.google.android.apps.setupwizard.searchselector
    - com.google.android.apps.stargate
 -  - com.google.android.apps.turbo # Device Health Services
    - com.google.android.apps.tycho # Google Fi
+   - com.google.android.apps.yourwidget
    - com.google.android.appsearch
-   - com.google.android.appsearch.apk
 diff --git a/config/device/common/sysconfig-exclusion.yml b/config/device/common/sysconfig-exclusion.yml
-index 21a6a2d6e..ffc9f1024 100644
+index 7c5a34914..3762f4c28 100644
 --- a/config/device/common/sysconfig-exclusion.yml
 +++ b/config/device/common/sysconfig-exclusion.yml
-@@ -43,6 +43,7 @@ sysconfig_exclusions:
+@@ -45,6 +45,7 @@ sysconfig_exclusions:
    - <allow-implicit-broadcast action="com.google.android.onetimeinitializer.ONE_TIME_INITIALIZED"/>
    - <allow-implicit-broadcast action="com.google.gservices.intent.action.GSERVICES_CHANGED"/>
    - <allow-implicit-broadcast action="com.google.gservices.intent.action.GSERVICES_OVERRIDE"/>
