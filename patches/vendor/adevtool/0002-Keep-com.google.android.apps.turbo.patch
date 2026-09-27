@@ -12,10 +12,10 @@ the assumption that the app will be installed as a user app.
  2 files changed, 27 insertions(+), 1 deletion(-)
 
 diff --git a/config/device/common/apk.yml b/config/device/common/apk.yml
-index 2d75c4207..054d06fda 100644
+index a8d084778..71dc53496 100644
 --- a/config/device/common/apk.yml
 +++ b/config/device/common/apk.yml
-@@ -346,6 +346,32 @@ package_inclusions:
+@@ -348,6 +348,32 @@ package_inclusions:
        - android.permission.READ_PRIVILEGED_PHONE_STATE
        - android.permission.UPDATE_DEVICE_STATS
  
@@ -46,9 +46,9 @@ index 2d75c4207..054d06fda 100644
 +      - android.permission.WRITE_SECURE_SETTINGS
 +
    com.google.euiccpixel:
-     max_known_version: 20235
+     max_known_version: 20245
      include_uses_permissions:
-@@ -682,7 +708,6 @@ package_exclusions:
+@@ -684,7 +710,6 @@ package_exclusions:
    - com.google.android.apps.scone # Adaptive Connectivity Services, see https://support.google.com/product-documentation/answer/12321563
    - com.google.android.apps.setupwizard.searchselector
    - com.google.android.apps.stargate
@@ -57,7 +57,7 @@ index 2d75c4207..054d06fda 100644
    - com.google.android.apps.yourwidget
    - com.google.android.appsearch
 diff --git a/config/device/common/sysconfig-exclusion.yml b/config/device/common/sysconfig-exclusion.yml
-index 7c5a34914..3762f4c28 100644
+index ed720c4af..3741c5fca 100644
 --- a/config/device/common/sysconfig-exclusion.yml
 +++ b/config/device/common/sysconfig-exclusion.yml
 @@ -45,6 +45,7 @@ sysconfig_exclusions:
