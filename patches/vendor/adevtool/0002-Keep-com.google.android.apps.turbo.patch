@@ -69,5 +69,5 @@ index ed720c4af..3741c5fca 100644
    - <backup-transport-whitelisted-service service="com.google.android.apps.restore/.transport.BackupTransportService"/>
    - <backup-transport-whitelisted-service service="com.google.android.apps.restore/.transport.D2dTransportService"/>
 -- 
-2.55.0
+2.56.0
 

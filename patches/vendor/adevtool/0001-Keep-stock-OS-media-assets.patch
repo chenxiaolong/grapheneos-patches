@@ -4,14 +4,14 @@ Date: Sat, 22 Aug 2026 01:53:06 -0400
 Subject: [PATCH 1/2] Keep stock OS media assets
 
 ---
- config/device/common/file-exclusion.yml    | 14 --------------
- config/device/common/file-inclusion.yml    | 14 ++++++++++++++
+ config/device/common/file-exclusion.yml    | 10 ----------
+ config/device/common/file-inclusion.yml    | 10 ++++++++++
  config/device/common/overlay-inclusion.yml |  8 ++++++++
  config/device/common/overlay-removal.yml   |  7 -------
- 4 files changed, 22 insertions(+), 21 deletions(-)
+ 4 files changed, 18 insertions(+), 17 deletions(-)
 
 diff --git a/config/device/common/file-exclusion.yml b/config/device/common/file-exclusion.yml
-index 05a9beb55..b2b0a8ca0 100644
+index 05a9beb55..19216c439 100644
 --- a/config/device/common/file-exclusion.yml
 +++ b/config/device/common/file-exclusion.yml
 @@ -7,10 +7,6 @@ filters:
@@ -45,19 +45,8 @@ index 05a9beb55..b2b0a8ca0 100644
        - product/fonts/Karla-Regular.ttf
        - product/fonts/Lato-Bold.ttf
        - product/fonts/Lato-BoldItalic.ttf
-@@ -68,10 +58,6 @@ filters:
-       - product/fonts/ZillaSlab-SemiBoldItalic.ttf
-       - product/framework/com.google.android.dialer.support.jar
-       - product/framework/libhwinfo.jar
--      - product/media/bootanimation-2026.zip
--      - product/media/bootanimation-dark-2026.zip
--      - product/media/bootanimation-dark.zip
--      - product/media/bootanimation.zip
-       - product/media/vibration/notification/Blip.xml
-       - product/media/vibration/notification/Classic_notification.xml
-       - product/media/vibration/notification/Fireworks.xml
 diff --git a/config/device/common/file-inclusion.yml b/config/device/common/file-inclusion.yml
-index 0b137d73c..7b0717933 100644
+index 0b137d73c..5b567d669 100644
 --- a/config/device/common/file-inclusion.yml
 +++ b/config/device/common/file-inclusion.yml
 @@ -2,6 +2,10 @@ filters:
@@ -71,7 +60,7 @@ index 0b137d73c..7b0717933 100644
        - recovery/init.recovery.
        - recovery/res/images/loop000
        - vendor/etc/bluetooth_power_limits
-@@ -26,11 +30,21 @@ filters:
+@@ -26,7 +30,13 @@ filters:
        - product/etc/felica/common.cfg
        - product/etc/felica/mfm.cfg
        - product/etc/felica/mfs.cfg
@@ -85,14 +74,6 @@ index 0b137d73c..7b0717933 100644
        - product/lib/libdmengine.so
        - product/lib/libdmjavaplugin.so
        - product/lib64/libdmengine.so
-       - product/lib64/libdmjavaplugin.so
-+      - product/media/bootanimation-2026.zip
-+      - product/media/bootanimation-dark-2026.zip
-+      - product/media/bootanimation-dark.zip
-+      - product/media/bootanimation.zip
-       - recovery/lib/firmware/brcm/BCM.hcd
-       - recovery/lib/firmware/brcm/BCM_D.hcd
-       - recovery/lib/firmware/brcm/BTFW_B.hcd
 diff --git a/config/device/common/overlay-inclusion.yml b/config/device/common/overlay-inclusion.yml
 index 70731294b..a79930aaf 100644
 --- a/config/device/common/overlay-inclusion.yml
@@ -173,5 +154,5 @@ index 9855c545a..14668468e 100644
        - com.android.documentsui/DocumentsUICustomization:string/trusted_quick_viewer_package = com.google.android.apps.docs
        - com.android.managedprovisioning/ManagedProvisioning:xml/overlays|*
 -- 
-2.55.0
+2.56.0
 

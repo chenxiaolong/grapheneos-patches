@@ -106,7 +106,7 @@ I use GrapheneOS' network location feature and with the third party apps I have 
 Patches:
 * [`0001-Keep-stock-OS-media-assets.patch`](./patches/vendor/adevtool/0001-Keep-stock-OS-media-assets.patch)
 
-Personal preference. For the boot animation, I like that the screen resolution doesn't change during boot.
+Personal preference.
 
 ## Appcompat properties
 
