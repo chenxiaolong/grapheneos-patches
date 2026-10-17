@@ -35,19 +35,19 @@ the stock Pixel OS.
  create mode 100644 services/core/java/com/android/server/pm/ext/DeviceHealthServicesHooks.java
 
 diff --git a/core/java/android/ext/PackageId.java b/core/java/android/ext/PackageId.java
-index 2784ba86b84e..47ad2a2f0f29 100644
+index 222ec38be4d2..5e58a13557c6 100644
 --- a/core/java/android/ext/PackageId.java
 +++ b/core/java/android/ext/PackageId.java
-@@ -56,4 +56,7 @@ public interface PackageId {
-     /** @hide */ int BUGLE = 14;
- 
-     /** @hide */ String SYSTEM_KEYBOARD = "com.android.inputmethod.latin";
+@@ -61,4 +61,7 @@ public interface PackageId {
+     /** @hide */ int GMSCOMPAT_TEST_PACKAGE_1 = 15;
+     /** @hide */ int GMSCOMPAT_TEST_PACKAGE_2 = 16;
+     /** @hide */ int GMSCOMPAT_TEST_PACKAGE_3 = 17;
 +
 +    /** @hide */ String DEVICE_HEALTH_SERVICES_NAME = "com.google.android.apps.turbo";
 +    /** @hide */ int DEVICE_HEALTH_SERVICES = 101;
  }
 diff --git a/core/java/com/android/internal/gmscompat/sysservice/GmcPackageManager.java b/core/java/com/android/internal/gmscompat/sysservice/GmcPackageManager.java
-index 3fe16a1a21a4..9a91d4e6a63a 100644
+index 61cea5e16c04..98cb4574c1fa 100644
 --- a/core/java/com/android/internal/gmscompat/sysservice/GmcPackageManager.java
 +++ b/core/java/com/android/internal/gmscompat/sysservice/GmcPackageManager.java
 @@ -20,6 +20,7 @@ import android.annotation.NonNull;
@@ -308,10 +308,10 @@ index 000000000000..8264b976c808
 +    }
 +}
 diff --git a/services/core/java/com/android/server/pm/ext/PackageExtInit.java b/services/core/java/com/android/server/pm/ext/PackageExtInit.java
-index 9eeff7579f48..a6e62947c0ed 100644
+index 7d50bd1cbdd5..3a8712b6ceed 100644
 --- a/services/core/java/com/android/server/pm/ext/PackageExtInit.java
 +++ b/services/core/java/com/android/server/pm/ext/PackageExtInit.java
-@@ -89,6 +89,8 @@ public class PackageExtInit implements ParsingPackageUtils.PackageExtInitIface {
+@@ -97,6 +97,8 @@ public class PackageExtInit implements ParsingPackageUtils.PackageExtInitIface {
                      "295499d8d0e93b7ed64f90e8cddffc12e3be23d8806f54e05d1abf415c37f5ba");
              case BUGLE_NAME -> validate(BUGLE, 273168063L,
                      "f7e73d4edc2b7f55eecd3f898d3cca7da9cbbf51694eba14f816e2eccf015035");
@@ -321,7 +321,7 @@ index 9eeff7579f48..a6e62947c0ed 100644
              default -> PackageId.UNKNOWN;
          };
 diff --git a/services/core/java/com/android/server/pm/ext/PackageHooksRegistry.java b/services/core/java/com/android/server/pm/ext/PackageHooksRegistry.java
-index 2f37f0757654..6f8a61369be8 100644
+index 54039155dbe3..2d7f05d0dd55 100644
 --- a/services/core/java/com/android/server/pm/ext/PackageHooksRegistry.java
 +++ b/services/core/java/com/android/server/pm/ext/PackageHooksRegistry.java
 @@ -18,6 +18,7 @@ public class PackageHooksRegistry {
@@ -332,10 +332,10 @@ index 2f37f0757654..6f8a61369be8 100644
              default -> PackageParsingHooks.DEFAULT;
          };
      }
-@@ -31,6 +32,7 @@ public class PackageHooksRegistry {
+@@ -33,6 +34,7 @@ public class PackageHooksRegistry {
+             case PackageId.G_EUICC_LPA -> new EuiccGoogleHooks();
              case PackageId.PIXEL_CAMERA_SERVICES -> new PixelCameraServicesHooks();
              case PackageId.PIXEL_HEALTH -> new PixelHealthHooks();
-             case PackageId.GMS_CORE -> new GmsCoreHooks();
 +            case PackageId.DEVICE_HEALTH_SERVICES -> new DeviceHealthServicesHooks();
              default -> PackageHooks.DEFAULT;
          };
