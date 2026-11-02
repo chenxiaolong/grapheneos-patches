@@ -1,0 +1,25 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Andrew Gunnerson <accounts+github@chiller3.com>
+Date: Sun, 8 Mar 2026 14:09:31 -0400
+Subject: [PATCH 1/2] Generate OTA only
+
+---
+ generate-release.sh | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/generate-release.sh b/generate-release.sh
+index 5e0ab45..dfe01d6 100755
+--- a/generate-release.sh
++++ b/generate-release.sh
+@@ -187,6 +187,8 @@ ota_from_target_files -k "$KEY_DIR/releasekey" $OTA_ARGS $TARGET_FILES \
+     $DEVICE-ota_update-$BUILD_NUMBER.zip
+ script/generate-metadata $DEVICE-ota_update-$BUILD_NUMBER.zip
+ 
++exit
++
+ img_from_target_files $TARGET_FILES $DEVICE-img-$BUILD_NUMBER.zip
+ 
+ source device/common/generate-factory-images-common.sh
+-- 
+2.56.0
+

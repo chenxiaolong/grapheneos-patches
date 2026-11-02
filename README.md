@@ -115,6 +115,13 @@ Patches:
 
 For apps that perform misguided/useless checks.
 
+## Disable building factory images
+
+Patches:
+* [`0001-Generate-OTA-only.patch`](./patches/script/0001-Generate-OTA-only.patch)
+
+I don't need them, so this speeds up the build process.
+
 ## License
 
 All patches are licensed under Apache 2.0, the same as the original code being patched. Please see [`LICENSE`](./LICENSE) for the full license text.
