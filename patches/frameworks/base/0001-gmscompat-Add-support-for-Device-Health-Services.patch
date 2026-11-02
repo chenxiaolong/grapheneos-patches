@@ -101,21 +101,22 @@ index b0f7e6dbd09f..30ccc0541473 100644
      }
  
 diff --git a/core/java/com/android/internal/pm/pkg/parsing/PackageParsingHooks.java b/core/java/com/android/internal/pm/pkg/parsing/PackageParsingHooks.java
-index 750fb0ff3a56..7d3a9c9e8d66 100644
+index deb7abc47c7b..86f6d9c0557b 100644
 --- a/core/java/com/android/internal/pm/pkg/parsing/PackageParsingHooks.java
 +++ b/core/java/com/android/internal/pm/pkg/parsing/PackageParsingHooks.java
-@@ -3,8 +3,10 @@ package com.android.internal.pm.pkg.parsing;
+@@ -3,9 +3,11 @@ package com.android.internal.pm.pkg.parsing;
  import android.annotation.Nullable;
  import android.content.pm.PackageManager;
  
 +import com.android.internal.pm.pkg.component.ParsedActivityImpl;
  import com.android.internal.pm.pkg.component.ParsedPermission;
+ import com.android.internal.pm.pkg.component.ParsedProcess;
  import com.android.internal.pm.pkg.component.ParsedProvider;
 +import com.android.internal.pm.pkg.component.ParsedProviderImpl;
  import com.android.internal.pm.pkg.component.ParsedService;
  import com.android.internal.pm.pkg.component.ParsedServiceImpl;
  import com.android.internal.pm.pkg.component.ParsedUsesPermission;
-@@ -43,6 +45,15 @@ public class PackageParsingHooks {
+@@ -44,6 +46,15 @@ public class PackageParsingHooks {
          return res;
      }
  

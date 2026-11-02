@@ -57,7 +57,7 @@ index a8d084778..71dc53496 100644
    - com.google.android.apps.yourwidget
    - com.google.android.appsearch
 diff --git a/config/device/common/sysconfig-exclusion.yml b/config/device/common/sysconfig-exclusion.yml
-index ed720c4af..3741c5fca 100644
+index 128a87fbb..183e03282 100644
 --- a/config/device/common/sysconfig-exclusion.yml
 +++ b/config/device/common/sysconfig-exclusion.yml
 @@ -45,6 +45,7 @@ sysconfig_exclusions:
