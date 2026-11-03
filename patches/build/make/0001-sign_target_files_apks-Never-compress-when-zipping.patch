@@ -1,0 +1,35 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Andrew Gunnerson <accounts+github@chiller3.com>
+Date: Sat, 19 Sep 2026 01:44:25 -0400
+Subject: [PATCH] sign_target_files_apks: Never compress when zipping
+
+It speeds up the release process significantly at the expense of a bit
+more disk space.
+---
+ tools/releasetools/sign_target_files_apks.py | 10 ++--------
+ 1 file changed, 2 insertions(+), 8 deletions(-)
+
+diff --git a/tools/releasetools/sign_target_files_apks.py b/tools/releasetools/sign_target_files_apks.py
+index b3bb318917..6df4bd8e6c 100755
+--- a/tools/releasetools/sign_target_files_apks.py
++++ b/tools/releasetools/sign_target_files_apks.py
+@@ -1805,14 +1805,8 @@ def CollectDirToZip(directory, zfp: str):
+   # Need to use absolute path, as we change current working directory when
+   # running external zip binary
+   zfp = os.path.abspath(zfp)
+-  with tempfile.NamedTemporaryFile(prefix="precompressed_list_") as tmpfile:
+-    for line in precompressed:
+-      tmpfile.write(line.encode() + b"\n")
+-    tmpfile.flush()
+-    # First add all other files to zip with compression
+-    common.RunAndCheckOutput(["zip", zfp, "-y", "-r", ".", "-x@" + tmpfile.name], cwd=directory)
+-    # Then add pre-compressed files without compression to save CPU cycle
+-    common.RunAndCheckOutput(["zip", zfp, "-y", "-0", "-r", ".", "-i@" + tmpfile.name], cwd=directory)
++
++  common.RunAndCheckOutput(["zip", zfp, "-y", "-0", "-r", "."], cwd=directory)
+ 
+ 
+ def main(argv):
+-- 
+2.56.0
+

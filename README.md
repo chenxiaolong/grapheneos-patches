@@ -129,6 +129,13 @@ Patches:
 
 Significantly speeds up OTA installation process, but breaks upgrades from older Android versions where `update_engine` does not support zstd yet.
 
+## Avoid compressing target files zip
+
+Patches:
+* [`0001-sign_target_files_apks-Never-compress-when-zipping.patch`](./patches/build/make/0001-sign_target_files_apks-Never-compress-when-zipping.patch)
+
+Significantly speeds up the OTA generation process where the target files zip needs to be immediately extracted again anyway.
+
 ## License
 
 All patches are licensed under Apache 2.0, the same as the original code being patched. Please see [`LICENSE`](./LICENSE) for the full license text.
