@@ -1,0 +1,26 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Andrew Gunnerson <accounts+github@chiller3.com>
+Date: Thu, 6 Aug 2026 20:13:41 -0400
+Subject: [PATCH 2/2] Use zstd install ops
+
+Signed-off-by: Andrew Gunnerson <accounts+github@chiller3.com>
+---
+ generate-release.sh | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/generate-release.sh b/generate-release.sh
+index dfe01d6..cd10f7d 100755
+--- a/generate-release.sh
++++ b/generate-release.sh
+@@ -183,6 +183,8 @@ sign_target_files_apks -o -d "$KEY_DIR" --avb_vbmeta_key "$KEY_DIR/avb.pem" --av
+     --extra_apex_payload_key com.google.pixel.camera.hal.apex="$KEY_DIR/avb.pem" \
+     $TARGET_FILES_INPUT $TARGET_FILES
+ 
++OTA_ARGS+=' --enable_replace_zstd=true'
++
+ ota_from_target_files -k "$KEY_DIR/releasekey" $OTA_ARGS $TARGET_FILES \
+     $DEVICE-ota_update-$BUILD_NUMBER.zip
+ script/generate-metadata $DEVICE-ota_update-$BUILD_NUMBER.zip
+-- 
+2.56.0
+

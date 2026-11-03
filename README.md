@@ -122,6 +122,13 @@ Patches:
 
 I don't need them, so this speeds up the build process.
 
+## Use zstd OTA payload install operations
+
+Patches:
+* [`0002-Use-zstd-install-ops.patch`](./patches/script/0002-Use-zstd-install-ops.patch)
+
+Significantly speeds up OTA installation process, but breaks upgrades from older Android versions where `update_engine` does not support zstd yet.
+
 ## License
 
 All patches are licensed under Apache 2.0, the same as the original code being patched. Please see [`LICENSE`](./LICENSE) for the full license text.
